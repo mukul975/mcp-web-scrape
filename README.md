@@ -9,11 +9,17 @@
 
 ## 🎬 Demo
 
-<!-- Replace with actual GIF -->
-<!-- Demo GIF will be added soon -->
-> 🎬 **Demo coming soon!** A comprehensive video demonstration showcasing the MCP Web Scrape server's capabilities will be available here.
+```bash
+# Extract content from any webpage
+npx mcp-web-scrape@latest
 
-*Watch how MCP Web Scrape transforms messy HTML into clean Markdown with citations in seconds*
+# Example: Extract from a news article
+> extract_content https://news.ycombinator.com
+✅ Extracted 1,247 words with 5 citations
+📄 Clean Markdown ready for your AI agent
+```
+
+*Transform messy HTML into clean, agent-ready Markdown with automatic citations*
 
 ## ⚡ Quick Start
 
@@ -132,7 +138,7 @@ mcp-web-scrape
 
 **HTTP/SSE**
 ```bash
-node bin/http.js --port 3000
+node dist/http.js --port 3000
 ```
 
 ## 📚 Resources
@@ -140,9 +146,9 @@ node bin/http.js --port 3000
 Access cached content as MCP resources:
 
 ```
-cache://example.com/path → Cached page content
+cache://news.ycombinator.com/path → Cached page content
 cache://stats → Cache statistics
-cache://robots/example.com → Robots.txt status
+cache://robots/news.ycombinator.com → Robots.txt status
 ```
 
 ## 🤝 Contributing
