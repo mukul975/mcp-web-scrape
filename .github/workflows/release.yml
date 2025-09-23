@@ -50,7 +50,12 @@ jobs:
     
     - name: Update package.json version
       run: |
-        npm version ${{ steps.version.outputs.VERSION }} --no-git-tag-version
+        CURRENT_VERSION=$(node -p "require('./package.json').version")
+        if [ "$CURRENT_VERSION" != "${{ steps.version.outputs.VERSION }}" ]; then
+          npm version ${{ steps.version.outputs.VERSION }} --no-git-tag-version
+        else
+          echo "Version already matches ${{ steps.version.outputs.VERSION }}, skipping update"
+        fi
     
     - name: Generate changelog
       id: changelog
