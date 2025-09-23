@@ -27,7 +27,7 @@ jobs:
         registry-url: 'https://registry.npmjs.org'
     
     - name: Install dependencies
-      run: npm ci
+      run: npm ci --prefer-offline --no-audit
     
     - name: Run tests
       run: npm test
@@ -47,39 +47,49 @@ jobs:
       id: changelog
       run: |
         # Create changelog entry
-        echo "## [${{ steps.version.outputs.VERSION }}] - $(date +'%Y-%m-%d')" > RELEASE_NOTES.md
-        echo "" >> RELEASE_NOTES.md
+        cat > RELEASE_NOTES.md << EOF
+        ## [${{ steps.version.outputs.VERSION }}] - $(date +'%Y-%m-%d')
         
-        # Get commits since last tag
-        LAST_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
-        if [ -n "$LAST_TAG" ]; then
-          echo "### Changes since $LAST_TAG:" >> RELEASE_NOTES.md
-          git log --pretty=format:"- %s (%h)" $LAST_TAG..HEAD >> RELEASE_NOTES.md
-        else
-          echo "### Initial Release" >> RELEASE_NOTES.md
-          echo "- First stable release of MCP Web Scrape" >> RELEASE_NOTES.md
-        fi
+        ### What's New
+        - Bug fixes and improvements
+        - Enhanced performance and stability
         
-        echo "" >> RELEASE_NOTES.md
-        echo "### Installation" >> RELEASE_NOTES.md
-        echo "\`\`\`bash" >> RELEASE_NOTES.md
-        echo "npm install -g mcp-web-scrape@${{ steps.version.outputs.VERSION }}" >> RELEASE_NOTES.md
-        echo "\`\`\`" >> RELEASE_NOTES.md
+        ### Installation
+        \`\`\`bash
+        npm install -g mcp-web-scrape@${{ steps.version.outputs.VERSION }}
+        \`\`\`
+        
+        ### Documentation
+        - [README](https://github.com/mukul975/mcp-web-scrape#readme)
+        - [Examples](https://github.com/mukul975/mcp-web-scrape/tree/main/examples)
+        EOF
     
     - name: Update CHANGELOG.md
       run: |
-        if [ ! -f CHANGELOG.md ]; then
-          echo "# Changelog" > CHANGELOG.md
-          echo "" >> CHANGELOG.md
-          echo "All notable changes to this project will be documented in this file." >> CHANGELOG.md
-          echo "" >> CHANGELOG.md
-          echo "The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)," >> CHANGELOG.md
-          echo "and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html)." >> CHANGELOG.md
-          echo "" >> CHANGELOG.md
+        # Create a temporary file with the new entry
+        cat RELEASE_NOTES.md > temp_changelog.md
+        echo "" >> temp_changelog.md
+        
+        # Append existing changelog if it exists
+        if [ -f CHANGELOG.md ]; then
+          # Skip the first few header lines and append the rest
+          tail -n +7 CHANGELOG.md >> temp_changelog.md
         fi
         
-        # Insert new changelog entry after the header
-        sed -i '6r RELEASE_NOTES.md' CHANGELOG.md
+        # Create the final changelog with header
+        cat > CHANGELOG.md << 'EOF'
+        # Changelog
+        
+        All notable changes to this project will be documented in this file.
+        
+        The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+        and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+        
+        EOF
+        
+        # Append the new content
+        cat temp_changelog.md >> CHANGELOG.md
+        rm temp_changelog.md
     
     - name: Publish to npm
       run: npm publish --provenance --access public
@@ -97,8 +107,7 @@ jobs:
       run: |
         # Create a scoped package.json for GitHub packages
         cp package.json package.json.backup
-        sed 's/"name": "mcp-web-scrape"/"name": "@mukul975\/mcp-web-scrape"/' package.json > package-github.json
-        mv package-github.json package.json
+        node -e "const pkg = require('./package.json'); pkg.name = '@mukul975/mcp-web-scrape'; require('fs').writeFileSync('package.json', JSON.stringify(pkg, null, 2));"
         npm publish
         # Restore original package.json
         mv package.json.backup package.json
@@ -106,15 +115,15 @@ jobs:
         NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
     - name: Create GitHub Release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: softprops/action-gh-release@v1
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release v${{ steps.version.outputs.VERSION }}
+        tag_name: v${{ steps.version.outputs.VERSION }}
+        name: Release v${{ steps.version.outputs.VERSION }}
         body_path: RELEASE_NOTES.md
         draft: false
         prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
