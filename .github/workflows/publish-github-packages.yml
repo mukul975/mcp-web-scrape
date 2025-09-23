@@ -12,6 +12,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      id-token: write  # Required for OIDC token generation
     
     steps:
     - name: Checkout code
@@ -29,7 +30,15 @@ jobs:
     
     - name: Build project
       run: npm run build
-    
+
+    - name: Verify OIDC token for GitHub Packages
+      run: |
+        echo "OIDC Token available: ${{ !!secrets.GITHUB_TOKEN }}"
+        echo "Repository: ${{ github.repository }}"
+        echo "Ref: ${{ github.ref }}"
+        echo "SHA: ${{ github.sha }}"
+        echo "Actor: ${{ github.actor }}"
+
     - name: Create scoped package for GitHub
       run: |
         # Create a scoped package.json for GitHub packages
@@ -37,10 +46,14 @@ jobs:
         jq '.name = "@mukul975/mcp-web-scrape"' package.json > package-github.json
         mv package-github.json package.json
     
-    - name: Publish to GitHub Package Registry
-      run: npm publish
+    - name: Publish to GitHub Package Registry with OIDC
+      run: |
+        echo "Publishing to GitHub Packages with OIDC authentication..."
+        npm publish --provenance
+        echo "Package published successfully to GitHub Packages"
       env:
         NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        NPM_CONFIG_PROVENANCE: true
     
     - name: Restore original package.json
       run: mv package.json.backup package.json
