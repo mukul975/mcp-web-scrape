@@ -17,11 +17,14 @@
 ## ⚡ Quick Start
 
 ```bash
+# Install globally
+npm install -g mcp-web-scrape
+
 # Try it instantly
 npx mcp-web-scrape@latest
 
 # Or start HTTP server
-node bin/http.js
+node dist/http.js
 ```
 
 ### ChatGPT Desktop Setup
