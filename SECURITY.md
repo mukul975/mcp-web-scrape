@@ -201,7 +201,7 @@ The following are generally **not considered security vulnerabilities**:
 
 - **Security Email**: `security@mcp-web-scrape.dev` (if available)
 - **GitHub Security**: [Private vulnerability reporting](https://github.com/mukul975/mcp-web-scrape/security)
-- **Maintainer**: [@mukul975](https://github.com/mukul975)
+- **Maintainer**: [@mukul975](https://github.com/mukul975) (Mahipal)
 
 ---
 

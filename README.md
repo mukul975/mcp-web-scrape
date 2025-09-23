@@ -150,7 +150,7 @@ We love contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## 📄 License
 
-MIT © [Mukul](https://github.com/mukul975)
+MIT © [Mahipal](https://github.com/mukul975)
 
 ## 🌟 Star History
 
