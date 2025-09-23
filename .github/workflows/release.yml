@@ -11,8 +11,7 @@ jobs:
     
     permissions:
       contents: write
-      id-token: write  # Required for OIDC token generation
-      packages: write  # Required for GitHub Packages publishing
+      packages: write
     
     steps:
     - name: Checkout code
@@ -105,14 +104,13 @@ jobs:
         cat temp_changelog.md >> CHANGELOG.md
         rm temp_changelog.md
     
-    - name: Publish to npm with OIDC provenance
+    - name: Publish to npm
       run: |
-        echo "Publishing with OIDC provenance..."
-        npm publish --provenance --access public
-        echo "Package published successfully with provenance attestation"
+        echo "Publishing to npm..."
+        npm publish --access public
+        echo "Package published successfully"
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        NPM_CONFIG_PROVENANCE: true
     
     - name: Setup Node.js for GitHub Package Registry
       uses: actions/setup-node@v4

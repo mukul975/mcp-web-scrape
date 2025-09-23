@@ -15,7 +15,6 @@
     "url": "https://github.com/mukul975/mcp-web-scrape.git"
   },
   "publishConfig": {
-    "provenance": true,
     "access": "public"
   },
   "homepage": "https://github.com/mukul975/mcp-web-scrape#readme",
