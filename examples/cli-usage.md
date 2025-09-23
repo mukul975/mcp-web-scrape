@@ -72,7 +72,7 @@ MCP_MAX_REQUESTS_PER_MINUTE=30 \
 MCP_CACHE_TTL=3600000 \
 MCP_MAX_CACHE_ENTRIES=1000 \
 MCP_TIMEOUT=30000 \
-MCP_USER_AGENT="mcp-web-scrape/1.0 (+https://github.com/your-username/mcp-web-scrape)" \
+MCP_USER_AGENT="mcp-web-scrape/1.0 (+https://github.com/mukul975/mcp-web-scrape)" \
 mcp-web-scrape --transport http --port 3000
 ```
 

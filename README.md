@@ -10,7 +10,8 @@
 ## 🎬 Demo
 
 <!-- Replace with actual GIF -->
-![Demo GIF Placeholder](https://via.placeholder.com/800x400/1a1a1a/ffffff?text=30-second+demo+coming+soon)
+<!-- Demo GIF will be added soon -->
+> 🎬 **Demo coming soon!** A comprehensive video demonstration showcasing the MCP Web Scrape server's capabilities will be available here.
 
 *Watch how MCP Web Scrape transforms messy HTML into clean Markdown with citations in seconds*
 
@@ -92,6 +93,12 @@ Add to your `~/Library/Application Support/Claude/claude_desktop_config.json`:
 
 ## 🚀 Roadmap
 
+- [x] **Core Web Scraping** - Extract clean content from web pages
+- [x] **Markdown Conversion** - Transform HTML to readable Markdown
+- [x] **Citation System** - Link extracted content to sources
+- [x] **Caching System** - Persistent storage with ETag support
+- [x] **Rate Limiting** - Respectful scraping with configurable delays
+- [x] **Robots.txt Compliance** - Ethical scraping practices
 - [ ] **Playwright Integration** - JavaScript rendering for SPAs
 - [ ] **PDF Snapshots** - Archive pages as searchable PDFs
 - [ ] **Cache Viewer UI** - Web interface for cache management

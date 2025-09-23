@@ -92,5 +92,5 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for information on how to contribute to t
 
 For questions and support:
 - 📖 [Documentation](README.md)
-- 🐛 [Report Issues](https://github.com/your-username/mcp-web-scrape/issues)
-- 💬 [Discussions](https://github.com/your-username/mcp-web-scrape/discussions)
+- 🐛 [Report Issues](https://github.com/mukul975/mcp-web-scrape/issues)
+- 💬 [Discussions](https://github.com/mukul975/mcp-web-scrape/discussions)
