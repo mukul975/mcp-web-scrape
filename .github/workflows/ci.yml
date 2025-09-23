@@ -41,8 +41,10 @@ jobs:
     
     - name: Test CLI
       run: |
+        # Test CLI help command
         node dist/stdio.js --help || echo "CLI help test completed"
-        timeout 2s node dist/stdio.js || echo "CLI startup test completed"
+        # Test CLI startup and immediate shutdown for MCP server
+        echo '{"jsonrpc":"2.0","method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"test","version":"1.0.0"}},"id":1}' | timeout 5s node dist/stdio.js || echo "CLI startup test completed"
     
     - name: Upload coverage reports
       if: matrix.node-version == '20.x'
