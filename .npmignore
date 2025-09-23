@@ -1,0 +1,43 @@
+# Source files
+src/
+tsconfig.json
+
+# Development files
+.github/
+examples/
+CONTRIBUTING.md
+SECURITY.md
+CHANGELOG.md
+LAUNCH_STRATEGY.md
+
+# Build artifacts
+node_modules/
+*.log
+*.tgz
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test files
+__tests__/
+*.test.js
+*.test.ts
+
+# Coverage
+coverage/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Docker
+Dockerfile
+docker-compose.yml
