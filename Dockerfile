@@ -10,11 +10,11 @@ RUN apk add --no-cache curl
 COPY package*.json ./
 COPY tsconfig.json ./
 
-# Install all dependencies (including dev dependencies for build)
-RUN npm ci
-
 # Copy source code
 COPY src/ ./src/
+
+# Install all dependencies (including dev dependencies for build)
+RUN npm ci
 
 # Build the application
 RUN npm run build
