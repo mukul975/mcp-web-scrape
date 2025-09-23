@@ -15,6 +15,7 @@ import {
 import { fetchUrl } from './fetch.js';
 import { extractContent, summarizeContent } from './extract.js';
 import { cache } from './cache.js';
+import * as cheerio from 'cheerio';
 
 /**
  * Calculate text similarity using a simple algorithm
@@ -599,7 +600,6 @@ export function createServer(): Server {
           const extracted = extractContent(fetchResult.content, fetchResult.url);
           
           // Parse HTML to extract metadata
-          const cheerio = await import('cheerio');
           const $ = cheerio.load(fetchResult.content);
           
           const metadata = {
@@ -713,7 +713,6 @@ export function createServer(): Server {
             forceRefresh: !useCache,
           });
 
-          const cheerio = await import('cheerio');
           const $ = cheerio.load(fetchResult.content);
           const baseUrl = new URL(fetchResult.url);
           
@@ -792,7 +791,6 @@ export function createServer(): Server {
             forceRefresh: !useCache,
           });
 
-          const cheerio = await import('cheerio');
           const $ = cheerio.load(fetchResult.content);
           const baseUrl = new URL(fetchResult.url);
           
@@ -1031,7 +1029,6 @@ export function createServer(): Server {
             forceRefresh: !useCache,
           });
 
-          const cheerio = await import('cheerio');
           const $ = cheerio.load(fetchResult.content);
           
           const structuredData: any = {
@@ -1174,7 +1171,6 @@ export function createServer(): Server {
               authorMatch: extracted1.author === extracted2.author,
             };
           } else if (compareType === 'structure') {
-            const cheerio = await import('cheerio');
             const $1 = cheerio.load(fetchResult1.content);
             const $2 = cheerio.load(fetchResult2.content);
             
