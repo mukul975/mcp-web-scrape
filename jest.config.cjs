@@ -33,5 +33,8 @@ module.exports = {
   modulePathIgnorePatterns: [
     '/node_modules/',
     '/dist/'
+  ],
+  transformIgnorePatterns: [
+    'node_modules/(?!(node-fetch|fetch-blob|data-uri-to-buffer|formdata-polyfill)/)',
   ]
 };
