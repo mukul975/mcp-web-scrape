@@ -2,11 +2,27 @@
   "name": "mcp-web-scrape",
   "version": "1.0.0",
   "description": "Clean, cached web content for agents—Markdown + citations",
-  "main": "dist/index.js",
+  "main": "dist/server.js",
   "type": "module",
+  "bin": {
+    "mcp-web-scrape": "dist/stdio.js"
+  },
   "engines": {
     "node": ">=18.0.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mukul975/mcp-web-scrape.git"
+  },
+  "homepage": "https://github.com/mukul975/mcp-web-scrape#readme",
+  "bugs": {
+    "url": "https://github.com/mukul975/mcp-web-scrape/issues"
+  },
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
