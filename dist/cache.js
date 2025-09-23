@@ -1,0 +1,166 @@
+/**
+ * Caching system for MCP Web Scrape Server
+ * Handles HTTP caching with ETags and Last-Modified headers
+ */
+import { config } from './config.js';
+class ContentCache {
+    cache = new Map();
+    accessOrder = new Map(); // For LRU eviction
+    accessCounter = 0;
+    /**
+     * Get a cache entry by URL
+     */
+    get(url) {
+        const entry = this.cache.get(url);
+        if (entry) {
+            // Update access order for LRU
+            this.accessOrder.set(url, ++this.accessCounter);
+            // Check if entry is still valid
+            if (this.isEntryValid(entry)) {
+                return entry;
+            }
+            else {
+                // Remove expired entry
+                this.delete(url);
+                return undefined;
+            }
+        }
+        return undefined;
+    }
+    /**
+     * Set a cache entry
+     */
+    set(entry) {
+        // Ensure we don't exceed max cache size
+        this.enforceMaxSize();
+        this.cache.set(entry.url, entry);
+        this.accessOrder.set(entry.url, ++this.accessCounter);
+    }
+    /**
+     * Delete a cache entry
+     */
+    delete(url) {
+        this.accessOrder.delete(url);
+        return this.cache.delete(url);
+    }
+    /**
+     * Check if an entry is still valid based on TTL
+     */
+    isEntryValid(entry) {
+        const age = Date.now() - entry.timestamp;
+        return age < (config.cacheTtl * 1000);
+    }
+    /**
+     * Enforce maximum cache size using LRU eviction
+     */
+    enforceMaxSize() {
+        while (this.cache.size >= config.maxCacheEntries) {
+            // Find the least recently used entry
+            let oldestUrl;
+            let oldestAccess = Infinity;
+            for (const [url, accessTime] of this.accessOrder) {
+                if (accessTime < oldestAccess) {
+                    oldestAccess = accessTime;
+                    oldestUrl = url;
+                }
+            }
+            if (oldestUrl) {
+                this.delete(oldestUrl);
+            }
+            else {
+                // Fallback: clear everything if we can't find LRU
+                this.clear();
+                break;
+            }
+        }
+    }
+    /**
+     * Get all cache entries
+     */
+    getAll() {
+        return Array.from(this.cache.values()).filter(entry => this.isEntryValid(entry));
+    }
+    /**
+     * Get cache statistics
+     */
+    getStats() {
+        const entries = this.getAll();
+        const totalSize = entries.reduce((sum, entry) => sum + entry.size, 0);
+        const timestamps = entries.map(entry => entry.timestamp);
+        const result = {
+            totalEntries: entries.length,
+            totalSize
+        };
+        if (timestamps.length > 0) {
+            result.oldestEntry = Math.min(...timestamps);
+            result.newestEntry = Math.max(...timestamps);
+        }
+        return result;
+    }
+    /**
+     * Clear all cache entries
+     */
+    clear() {
+        this.cache.clear();
+        this.accessOrder.clear();
+        this.accessCounter = 0;
+    }
+    /**
+     * Clean up expired entries
+     */
+    cleanup() {
+        const initialSize = this.cache.size;
+        const expiredUrls = [];
+        for (const [url, entry] of this.cache) {
+            if (!this.isEntryValid(entry)) {
+                expiredUrls.push(url);
+            }
+        }
+        expiredUrls.forEach(url => this.delete(url));
+        return initialSize - this.cache.size;
+    }
+    /**
+     * Get conditional request headers for a URL
+     */
+    getConditionalHeaders(url) {
+        const entry = this.cache.get(url);
+        const headers = {};
+        if (entry) {
+            if (entry.etag) {
+                headers['If-None-Match'] = entry.etag;
+            }
+            if (entry.lastModified) {
+                headers['If-Modified-Since'] = entry.lastModified;
+            }
+        }
+        return headers;
+    }
+    /**
+     * Check if we have a cached version of a URL
+     */
+    has(url) {
+        const entry = this.cache.get(url);
+        return entry !== undefined && this.isEntryValid(entry);
+    }
+    /**
+     * Get cache entry metadata (without content)
+     */
+    getMetadata(url) {
+        const entry = this.get(url);
+        if (entry) {
+            const { content, ...metadata } = entry;
+            return metadata;
+        }
+        return undefined;
+    }
+}
+// Export singleton instance
+export const cache = new ContentCache();
+// Periodic cleanup
+setInterval(() => {
+    const cleaned = cache.cleanup();
+    if (cleaned > 0) {
+        console.log(`Cleaned up ${cleaned} expired cache entries`);
+    }
+}, 300000); // Every 5 minutes
+//# sourceMappingURL=cache.js.map
