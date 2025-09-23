@@ -16,6 +16,7 @@ import { fetchUrl } from './fetch.js';
 import { extractContent, summarizeContent } from './extract.js';
 import { cache } from './cache.js';
 import * as cheerio from 'cheerio';
+import { createHash } from 'crypto';
 
 /**
  * Calculate text similarity using a simple algorithm
@@ -389,6 +390,308 @@ export function createServer(): Server {
               },
             },
             required: ['urls'],
+          },
+        },
+        {
+          name: 'extract_forms',
+          description: 'Extract form elements and their structure from web pages',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              url: {
+                type: 'string',
+                description: 'The URL to extract forms from',
+              },
+              includeHidden: {
+                type: 'boolean',
+                description: 'Whether to include hidden form fields (default: false)',
+                default: false,
+              },
+              includeDisabled: {
+                type: 'boolean',
+                description: 'Whether to include disabled form fields (default: false)',
+                default: false,
+              },
+              useCache: {
+                type: 'boolean',
+                description: 'Whether to use cached content if available (default: true)',
+                default: true,
+              },
+            },
+            required: ['url'],
+          },
+        },
+        {
+          name: 'extract_tables',
+          description: 'Extract and parse HTML tables with optional CSV export',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              url: {
+                type: 'string',
+                description: 'The URL to extract tables from',
+              },
+              format: {
+                type: 'string',
+                enum: ['json', 'csv', 'markdown'],
+                description: 'Output format for tables (default: json)',
+                default: 'json',
+              },
+              includeHeaders: {
+                type: 'boolean',
+                description: 'Whether to include table headers (default: true)',
+                default: true,
+              },
+              minRows: {
+                type: 'number',
+                description: 'Minimum number of rows to include table (default: 1)',
+                default: 1,
+              },
+              useCache: {
+                type: 'boolean',
+                description: 'Whether to use cached content if available (default: true)',
+                default: true,
+              },
+            },
+            required: ['url'],
+          },
+        },
+        {
+          name: 'extract_social_media',
+          description: 'Extract social media links and metadata from web pages',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              url: {
+                type: 'string',
+                description: 'The URL to extract social media links from',
+              },
+              platforms: {
+                type: 'array',
+                items: {
+                  type: 'string',
+                  enum: ['twitter', 'facebook', 'instagram', 'linkedin', 'youtube', 'tiktok', 'all'],
+                },
+                description: 'Social media platforms to extract (default: all)',
+                default: ['all'],
+              },
+              useCache: {
+                type: 'boolean',
+                description: 'Whether to use cached content if available (default: true)',
+                default: true,
+              },
+            },
+            required: ['url'],
+          },
+        },
+        {
+          name: 'extract_contact_info',
+          description: 'Extract contact information like emails, phones, addresses from web pages',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              url: {
+                type: 'string',
+                description: 'The URL to extract contact information from',
+              },
+              types: {
+                type: 'array',
+                items: {
+                  type: 'string',
+                  enum: ['email', 'phone', 'address', 'all'],
+                },
+                description: 'Types of contact information to extract (default: all)',
+                default: ['all'],
+              },
+              useCache: {
+                type: 'boolean',
+                description: 'Whether to use cached content if available (default: true)',
+                default: true,
+              },
+            },
+            required: ['url'],
+          },
+        },
+        {
+          name: 'extract_headings',
+          description: 'Extract document structure and heading hierarchy from web pages',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              url: {
+                type: 'string',
+                description: 'The URL to extract headings from',
+              },
+              levels: {
+                type: 'array',
+                items: {
+                  type: 'number',
+                  minimum: 1,
+                  maximum: 6,
+                },
+                description: 'Heading levels to extract (1-6, default: all)',
+                default: [1, 2, 3, 4, 5, 6],
+              },
+              includeText: {
+                type: 'boolean',
+                description: 'Whether to include heading text content (default: true)',
+                default: true,
+              },
+              useCache: {
+                type: 'boolean',
+                description: 'Whether to use cached content if available (default: true)',
+                default: true,
+              },
+            },
+            required: ['url'],
+          },
+        },
+        {
+          name: 'extract_feeds',
+          description: 'Discover and parse RSS/Atom feeds from web pages',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              url: {
+                type: 'string',
+                description: 'The URL to discover feeds from',
+              },
+              maxItems: {
+                type: 'number',
+                description: 'Maximum number of feed items to return (default: 10)',
+                default: 10,
+              },
+              includeContent: {
+                type: 'boolean',
+                description: 'Whether to include full content of feed items (default: false)',
+                default: false,
+              },
+              useCache: {
+                type: 'boolean',
+                description: 'Whether to use cached content if available (default: true)',
+                default: true,
+              },
+            },
+            required: ['url'],
+          },
+        },
+        {
+          name: 'monitor_changes',
+          description: 'Monitor web page content changes over time',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              url: {
+                type: 'string',
+                description: 'The URL to monitor for changes',
+              },
+              interval: {
+                type: 'number',
+                description: 'Check interval in seconds (default: 3600)',
+                default: 3600,
+              },
+              threshold: {
+                type: 'number',
+                description: 'Change detection threshold 0-1 (default: 0.1)',
+                default: 0.1,
+              },
+              useCache: {
+                type: 'boolean',
+                description: 'Whether to use cached content if available (default: true)',
+                default: true,
+              },
+            },
+            required: ['url'],
+          },
+        },
+        {
+          name: 'analyze_performance',
+          description: 'Analyze web page performance metrics',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              url: {
+                type: 'string',
+                description: 'The URL to analyze performance for',
+              },
+              metrics: {
+                type: 'array',
+                items: {
+                  type: 'string',
+                  enum: ['size', 'resources', 'seo', 'accessibility', 'all'],
+                },
+                description: 'Performance metrics to analyze (default: all)',
+                default: ['all'],
+              },
+              useCache: {
+                type: 'boolean',
+                description: 'Whether to use cached content if available (default: true)',
+                default: true,
+              },
+            },
+            required: ['url'],
+          },
+        },
+        {
+          name: 'generate_sitemap',
+          description: 'Generate sitemap by crawling website pages',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              url: {
+                type: 'string',
+                description: 'The base URL to start crawling from',
+              },
+              maxDepth: {
+                type: 'number',
+                description: 'Maximum crawl depth (default: 2)',
+                default: 2,
+              },
+              maxPages: {
+                type: 'number',
+                description: 'Maximum number of pages to crawl (default: 50)',
+                default: 50,
+              },
+              includeExternal: {
+                type: 'boolean',
+                description: 'Whether to include external links (default: false)',
+                default: false,
+              },
+              useCache: {
+                type: 'boolean',
+                description: 'Whether to use cached content if available (default: true)',
+                default: true,
+              },
+            },
+            required: ['url'],
+          },
+        },
+        {
+          name: 'validate_html',
+          description: 'Validate HTML structure, accessibility, and SEO',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              url: {
+                type: 'string',
+                description: 'The URL to validate',
+              },
+              checks: {
+                type: 'array',
+                items: {
+                  type: 'string',
+                  enum: ['structure', 'accessibility', 'seo', 'performance', 'all'],
+                },
+                description: 'Validation checks to perform (default: all)',
+                default: ['all'],
+              },
+              useCache: {
+                type: 'boolean',
+                description: 'Whether to use cached content if available (default: true)',
+                default: true,
+              },
+            },
+            required: ['url'],
           },
         },
       ],
@@ -1288,6 +1591,979 @@ export function createServer(): Server {
               {
                 type: 'text',
                 text: JSON.stringify(batchResult, null, 2),
+              },
+            ],
+          };
+        }
+
+        case 'extract_forms': {
+          const {
+            url,
+            includeHidden = false,
+            includeDisabled = false,
+            useCache = true,
+          } = args as {
+            url: string;
+            includeHidden?: boolean;
+            includeDisabled?: boolean;
+            useCache?: boolean;
+          };
+
+          if (!url || typeof url !== 'string') {
+            throw new McpError(
+              ErrorCode.InvalidParams,
+              'URL parameter is required and must be a string'
+            );
+          }
+
+          const fetchResult = await fetchUrl(url, {
+            forceRefresh: !useCache,
+          });
+
+          const $ = cheerio.load(fetchResult.content);
+          const forms: any[] = [];
+
+          $('form').each((_, formElement) => {
+            const form: any = {
+              action: $(formElement).attr('action') || '',
+              method: $(formElement).attr('method') || 'GET',
+              enctype: $(formElement).attr('enctype') || 'application/x-www-form-urlencoded',
+              name: $(formElement).attr('name') || '',
+              id: $(formElement).attr('id') || '',
+              fields: [],
+            };
+
+            // Extract form fields
+            $(formElement).find('input, textarea, select').each((_, fieldElement) => {
+              const tagName = $(fieldElement).prop('tagName')?.toLowerCase();
+              const field: any = {
+                type: $(fieldElement).attr('type') || tagName,
+                name: $(fieldElement).attr('name') || '',
+                id: $(fieldElement).attr('id') || '',
+                value: String($(fieldElement).val() ?? ''),
+                placeholder: $(fieldElement).attr('placeholder') || '',
+                required: $(fieldElement).attr('required') !== undefined,
+                disabled: $(fieldElement).attr('disabled') !== undefined,
+                hidden: $(fieldElement).attr('type') === 'hidden',
+              };
+
+              // Add label if available
+              if (field.id) {
+                const label = $(formElement).find(`label[for="${field.id}"]`).text().trim();
+                if (label) field.label = label;
+              }
+
+              // Filter based on options
+              if (!includeHidden && field.hidden) return;
+              if (!includeDisabled && field.disabled) return;
+
+              // Handle select options
+              if ($(fieldElement).prop('tagName')?.toLowerCase() === 'select') {
+                field.options = [];
+                $(fieldElement).find('option').each((_, optionElement) => {
+                  field.options.push({
+                    value: $(optionElement).attr('value') || '',
+                    text: $(optionElement).text().trim(),
+                    selected: $(optionElement).attr('selected') !== undefined,
+                  });
+                });
+              }
+
+              form.fields.push(field);
+            });
+
+            forms.push(form);
+          });
+
+          const result = {
+            url: fetchResult.url,
+            formsFound: forms.length,
+            forms,
+            fromCache: fetchResult.fromCache,
+          };
+
+          return {
+            content: [
+              {
+                type: 'text',
+                text: JSON.stringify(result, null, 2),
+              },
+            ],
+          };
+        }
+
+        case 'extract_tables': {
+          const {
+            url,
+            format = 'json',
+            includeHeaders = true,
+            minRows = 1,
+            useCache = true,
+          } = args as {
+            url: string;
+            format?: 'json' | 'csv' | 'markdown';
+            includeHeaders?: boolean;
+            minRows?: number;
+            useCache?: boolean;
+          };
+
+          if (!url || typeof url !== 'string') {
+            throw new McpError(
+              ErrorCode.InvalidParams,
+              'URL parameter is required and must be a string'
+            );
+          }
+
+          const fetchResult = await fetchUrl(url, {
+            forceRefresh: !useCache,
+          });
+
+          const $ = cheerio.load(fetchResult.content);
+          const tables: any[] = [];
+
+          $('table').each((tableIndex, tableElement) => {
+            const rows: string[][] = [];
+            let headers: string[] = [];
+
+            // Extract headers
+            if (includeHeaders) {
+              $(tableElement).find('thead tr, tr:first-child').first().find('th, td').each((_, headerElement) => {
+                headers.push($(headerElement).text().trim());
+              });
+            }
+
+            // Extract data rows
+            const dataRows = includeHeaders 
+              ? $(tableElement).find('tbody tr, tr:not(:first-child)')
+              : $(tableElement).find('tr');
+
+            dataRows.each((_, rowElement) => {
+              const row: string[] = [];
+              $(rowElement).find('td, th').each((_, cellElement) => {
+                row.push($(cellElement).text().trim());
+              });
+              if (row.length > 0) rows.push(row);
+            });
+
+            // Filter by minimum rows
+            if (rows.length >= minRows) {
+              const table: any = {
+                index: tableIndex,
+                headers: headers.length > 0 ? headers : null,
+                rows,
+                rowCount: rows.length,
+                columnCount: Math.max(headers.length, ...rows.map(r => r.length)),
+              };
+
+              // Format output
+              if (format === 'csv') {
+                let csvContent = '';
+                if (headers.length > 0) {
+                  csvContent += headers.map(h => `"${h.replace(/"/g, '""')}"`).join(',') + '\n';
+                }
+                csvContent += rows.map(row => 
+                  row.map(cell => `"${cell.replace(/"/g, '""')}"`).join(',')
+                ).join('\n');
+                table.csv = csvContent;
+              } else if (format === 'markdown') {
+                let mdContent = '';
+                if (headers.length > 0) {
+                  mdContent += '| ' + headers.join(' | ') + ' |\n';
+                  mdContent += '| ' + headers.map(() => '---').join(' | ') + ' |\n';
+                }
+                mdContent += rows.map(row => '| ' + row.join(' | ') + ' |').join('\n');
+                table.markdown = mdContent;
+              }
+
+              tables.push(table);
+            }
+          });
+
+          const result = {
+            url: fetchResult.url,
+            tablesFound: tables.length,
+            format,
+            tables,
+            fromCache: fetchResult.fromCache,
+          };
+
+          return {
+            content: [
+              {
+                type: 'text',
+                text: JSON.stringify(result, null, 2),
+              },
+            ],
+          };
+        }
+
+        case 'extract_social_media': {
+          const {
+            url,
+            platforms = ['all'],
+            useCache = true,
+          } = args as {
+            url: string;
+            platforms?: string[];
+            useCache?: boolean;
+          };
+
+          if (!url || typeof url !== 'string') {
+            throw new McpError(
+              ErrorCode.InvalidParams,
+              'URL parameter is required and must be a string'
+            );
+          }
+
+          const fetchResult = await fetchUrl(url, {
+            forceRefresh: !useCache,
+          });
+
+          const $ = cheerio.load(fetchResult.content);
+          const socialLinks: any = {};
+
+          const platformPatterns = {
+            twitter: /(?:twitter\.com|x\.com)\/([a-zA-Z0-9_]+)/,
+            facebook: /facebook\.com\/([a-zA-Z0-9._]+)/,
+            instagram: /instagram\.com\/([a-zA-Z0-9._]+)/,
+            linkedin: /linkedin\.com\/(?:in|company)\/([a-zA-Z0-9-]+)/,
+            youtube: /youtube\.com\/(?:channel\/|user\/|c\/)?([a-zA-Z0-9_-]+)/,
+            tiktok: /tiktok\.com\/@([a-zA-Z0-9._]+)/,
+          };
+
+          const shouldExtract = (platform: string) => 
+            platforms.includes('all') || platforms.includes(platform);
+
+          // Extract from links
+          $('a[href]').each((_, linkElement) => {
+            const href = $(linkElement).attr('href') || '';
+            const text = $(linkElement).text().trim();
+
+            Object.entries(platformPatterns).forEach(([platform, pattern]) => {
+              if (shouldExtract(platform) && pattern.test(href)) {
+                if (!socialLinks[platform]) socialLinks[platform] = [];
+                const match = href.match(pattern);
+                socialLinks[platform].push({
+                  url: href,
+                  username: match ? match[1] : '',
+                  linkText: text,
+                });
+              }
+            });
+          });
+
+          // Extract from meta tags
+          const metaSocial: any = {};
+          $('meta[property^="og:"], meta[name^="twitter:"]').each((_, metaElement) => {
+            const property = $(metaElement).attr('property') || $(metaElement).attr('name') || '';
+            const content = $(metaElement).attr('content') || '';
+            if (property && content) {
+              metaSocial[property] = content;
+            }
+          });
+
+          const result = {
+            url: fetchResult.url,
+            socialLinks,
+            metaTags: metaSocial,
+            platformsFound: Object.keys(socialLinks),
+            fromCache: fetchResult.fromCache,
+          };
+
+          return {
+            content: [
+              {
+                type: 'text',
+                text: JSON.stringify(result, null, 2),
+              },
+            ],
+          };
+        }
+
+        case 'extract_contact_info': {
+          const {
+            url,
+            types = ['all'],
+            useCache = true,
+          } = args as {
+            url: string;
+            types?: string[];
+            useCache?: boolean;
+          };
+
+          if (!url || typeof url !== 'string') {
+            throw new McpError(
+              ErrorCode.InvalidParams,
+              'URL parameter is required and must be a string'
+            );
+          }
+
+          const fetchResult = await fetchUrl(url, {
+            forceRefresh: !useCache,
+          });
+
+          const $ = cheerio.load(fetchResult.content);
+          const contactInfo: any = {};
+
+          const shouldExtract = (type: string) => 
+            types.includes('all') || types.includes(type);
+
+          // Extract emails
+          if (shouldExtract('email')) {
+            const emailPattern = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g;
+            const pageText = $.text();
+            const emails = [...new Set(pageText.match(emailPattern) || [])];
+            
+            // Also check mailto links
+            const mailtoEmails: string[] = [];
+            $('a[href^="mailto:"]').each((_, linkElement) => {
+              const href = $(linkElement).attr('href') || '';
+              const email = href.replace('mailto:', '').split('?')[0];
+              if (email) mailtoEmails.push(email);
+            });
+            
+            contactInfo.emails = [...new Set([...emails, ...mailtoEmails])];
+          }
+
+          // Extract phone numbers (international format support)
+          if (shouldExtract('phone')) {
+            // More comprehensive regex for international phone numbers
+            // Supports E.164 format and common international patterns
+            const phonePattern = /(?:\+?[1-9]\d{0,3}[-\s]?)?(?:\(?\d{1,4}\)?[-\s]?)?\d{1,4}[-\s]?\d{1,4}[-\s]?\d{1,9}/g;
+            const pageText = $.text();
+            const phones = [...new Set(pageText.match(phonePattern) || [])];
+            
+            // Also check tel links
+            const telPhones: string[] = [];
+            $('a[href^="tel:"]').each((_, linkElement) => {
+              const href = $(linkElement).attr('href') || '';
+              const phone = href.replace('tel:', '');
+              if (phone) telPhones.push(phone);
+            });
+            
+            contactInfo.phones = [...new Set([...phones, ...telPhones])];
+          }
+
+          // Extract addresses (basic implementation)
+          if (shouldExtract('address')) {
+            const addresses: string[] = [];
+            
+            // Look for address-like patterns
+            $('[class*="address"], [id*="address"], address').each((_, element) => {
+              const text = $(element).text().trim();
+              if (text.length > 10) addresses.push(text);
+            });
+            
+            // Look for structured data addresses
+            $('[itemtype*="PostalAddress"], [typeof*="PostalAddress"]').each((_, element) => {
+              const text = $(element).text().trim();
+              if (text.length > 10) addresses.push(text);
+            });
+            
+            contactInfo.addresses = [...new Set(addresses)];
+          }
+
+          const result = {
+            url: fetchResult.url,
+            contactInfo,
+            typesExtracted: Object.keys(contactInfo),
+            fromCache: fetchResult.fromCache,
+          };
+
+          return {
+            content: [
+              {
+                type: 'text',
+                text: JSON.stringify(result, null, 2),
+              },
+            ],
+          };
+        }
+
+        case 'extract_headings': {
+          const {
+            url,
+            levels = [1, 2, 3, 4, 5, 6],
+            includeText = true,
+            useCache = true,
+          } = args as {
+            url: string;
+            levels?: number[];
+            includeText?: boolean;
+            useCache?: boolean;
+          };
+
+          if (!url || typeof url !== 'string') {
+            throw new McpError(
+              ErrorCode.InvalidParams,
+              'URL parameter is required and must be a string'
+            );
+          }
+
+          const fetchResult = await fetchUrl(url, {
+            forceRefresh: !useCache,
+          });
+
+          const $ = cheerio.load(fetchResult.content);
+          const headings: any[] = [];
+
+          levels.forEach(level => {
+            $(`h${level}`).each((index, element) => {
+              const heading: any = {
+                level,
+                tag: `h${level}`,
+                index,
+                id: $(element).attr('id') || '',
+                class: $(element).attr('class') || '',
+              };
+
+              if (includeText) {
+                heading.text = $(element).text().trim();
+                heading.html = $(element).html();
+              }
+
+              headings.push(heading);
+            });
+          });
+
+          // Sort by document order
+          headings.sort((a, b) => {
+            if (a.level !== b.level) return a.level - b.level;
+            return a.index - b.index;
+          });
+
+          const result = {
+            url: fetchResult.url,
+            headingsFound: headings.length,
+            levels: [...new Set(headings.map(h => h.level))].sort(),
+            headings,
+            structure: levels.map(level => ({
+              level,
+              count: headings.filter(h => h.level === level).length,
+            })),
+            fromCache: fetchResult.fromCache,
+          };
+
+          return {
+            content: [
+              {
+                type: 'text',
+                text: JSON.stringify(result, null, 2),
+              },
+            ],
+          };
+        }
+
+        case 'extract_feeds': {
+          const {
+            url,
+            maxItems = 10,
+            includeContent = false,
+            useCache = true,
+          } = args as {
+            url: string;
+            maxItems?: number;
+            includeContent?: boolean;
+            useCache?: boolean;
+          };
+
+          if (!url || typeof url !== 'string') {
+            throw new McpError(
+              ErrorCode.InvalidParams,
+              'URL parameter is required and must be a string'
+            );
+          }
+
+          const fetchResult = await fetchUrl(url, {
+            forceRefresh: !useCache,
+          });
+
+          const $ = cheerio.load(fetchResult.content);
+          const feeds: any[] = [];
+
+          // Discover feed links
+          const feedLinks: string[] = [];
+          $('link[type="application/rss+xml"], link[type="application/atom+xml"]').each((_, element) => {
+            const href = $(element).attr('href');
+            if (href) {
+              const feedUrl = new URL(href, fetchResult.url).toString();
+              feedLinks.push(feedUrl);
+            }
+          });
+
+          // Also check for common feed URLs
+          const commonFeeds = ['/rss', '/feed', '/atom.xml', '/rss.xml', '/feed.xml'];
+          for (const feedPath of commonFeeds) {
+            try {
+              const feedUrl = new URL(feedPath, fetchResult.url).toString();
+              feedLinks.push(feedUrl);
+            } catch {
+              // Skip invalid URLs
+            }
+          }
+
+          // Fetch and parse feeds
+          for (const feedUrl of [...new Set(feedLinks)]) {
+            try {
+              const feedResult = await fetchUrl(feedUrl, { forceRefresh: !useCache });
+              const feed$ = cheerio.load(feedResult.content, { xmlMode: true });
+              
+              const feedData: any = {
+                url: feedUrl,
+                type: feedResult.content.includes('<rss') ? 'RSS' : 'Atom',
+                title: feed$('channel > title, feed > title').first().text().trim(),
+                description: feed$('channel > description, feed > subtitle').first().text().trim(),
+                link: feed$('channel > link, feed > link[rel="alternate"]').first().attr('href') || feed$('channel > link, feed > link').first().text().trim(),
+                items: [],
+              };
+
+              // Extract items
+              const items = feed$('item, entry').slice(0, maxItems);
+              items.each((_, itemElement) => {
+                const item: any = {
+                  title: feed$(itemElement).find('title').first().text().trim(),
+                  link: feed$(itemElement).find('link').first().attr('href') || feed$(itemElement).find('link').first().text().trim(),
+                  description: feed$(itemElement).find('description, summary').first().text().trim(),
+                  pubDate: feed$(itemElement).find('pubDate, published').first().text().trim(),
+                  author: feed$(itemElement).find('author, dc\\:creator').first().text().trim(),
+                };
+
+                if (includeContent) {
+                  item.content = feed$(itemElement).find('content\\:encoded, content').first().text().trim();
+                }
+
+                feedData.items.push(item);
+              });
+
+              feeds.push(feedData);
+            } catch {
+              // Skip feeds that can't be parsed
+            }
+          }
+
+          const result = {
+            url: fetchResult.url,
+            feedsFound: feeds.length,
+            feeds,
+            fromCache: fetchResult.fromCache,
+          };
+
+          return {
+            content: [
+              {
+                type: 'text',
+                text: JSON.stringify(result, null, 2),
+              },
+            ],
+          };
+        }
+
+        case 'monitor_changes': {
+          const {
+            url,
+            interval = 3600,
+            threshold = 0.1,
+            useCache = true,
+          } = args as {
+            url: string;
+            interval?: number;
+            threshold?: number;
+            useCache?: boolean;
+          };
+
+          if (!url || typeof url !== 'string') {
+            throw new McpError(
+              ErrorCode.InvalidParams,
+              'URL parameter is required and must be a string'
+            );
+          }
+
+          const fetchResult = await fetchUrl(url, {
+            forceRefresh: !useCache,
+          });
+
+          const $ = cheerio.load(fetchResult.content);
+          const currentContent = $.text().trim();
+          const currentHash = createHash('md5').update(currentContent).digest('hex');
+          
+          // Store monitoring data (in a real implementation, this would be persisted)
+          const monitoringKey = `monitor_${Buffer.from(url).toString('base64')}`;
+          const previousData = cache.get(monitoringKey) as any;
+          
+          const result: any = {
+            url: fetchResult.url,
+            currentHash,
+            timestamp: new Date().toISOString(),
+            contentLength: currentContent.length,
+            monitoring: {
+              interval,
+              threshold,
+            },
+          };
+
+          if (previousData) {
+            const similarity = calculateTextSimilarity(previousData.content, currentContent);
+            const changeDetected = similarity < (1 - threshold);
+            
+            result.previousHash = previousData.hash;
+            result.similarity = similarity;
+            result.changeDetected = changeDetected;
+            result.lastChecked = previousData.timestamp;
+            result.changePercentage = Math.round((1 - similarity) * 100 * 100) / 100;
+            
+            if (changeDetected) {
+              result.changes = {
+                contentLengthDiff: currentContent.length - previousData.contentLength,
+                timeSinceLastChange: new Date().getTime() - new Date(previousData.timestamp).getTime(),
+              };
+            }
+          } else {
+            result.isFirstCheck = true;
+          }
+
+          // Update cache with current data
+          cache.set({
+            url: monitoringKey,
+            content: currentContent,
+            title: 'Monitoring Data',
+            timestamp: Date.now(),
+            size: currentContent.length,
+          });
+
+          return {
+            content: [
+              {
+                type: 'text',
+                text: JSON.stringify(result, null, 2),
+              },
+            ],
+          };
+        }
+
+        case 'analyze_performance': {
+          const {
+            url,
+            metrics = ['all'],
+            useCache = true,
+          } = args as {
+            url: string;
+            metrics?: string[];
+            useCache?: boolean;
+          };
+
+          if (!url || typeof url !== 'string') {
+            throw new McpError(
+              ErrorCode.InvalidParams,
+              'URL parameter is required and must be a string'
+            );
+          }
+
+          const startTime = Date.now();
+          const fetchResult = await fetchUrl(url, {
+            forceRefresh: !useCache,
+          });
+          const endTime = Date.now();
+
+          const $ = cheerio.load(fetchResult.content);
+          const shouldAnalyze = (metric: string) => 
+            metrics.includes('all') || metrics.includes(metric);
+
+          const performance: any = {
+            url: fetchResult.url,
+            timestamp: new Date().toISOString(),
+            loadTime: endTime - startTime,
+          };
+
+          if (shouldAnalyze('size')) {
+            performance.size = {
+              html: fetchResult.content.length,
+              htmlFormatted: `${Math.round(fetchResult.content.length / 1024 * 100) / 100} KB`,
+              compressed: Buffer.byteLength(fetchResult.content, 'utf8'),
+            };
+          }
+
+          if (shouldAnalyze('resources')) {
+            const resources = {
+              images: $('img').length,
+              scripts: $('script').length,
+              stylesheets: $('link[rel="stylesheet"]').length,
+              links: $('a').length,
+              forms: $('form').length,
+            };
+            performance.resources = resources;
+            performance.totalResources = Object.values(resources).reduce((a: number, b: number) => a + b, 0);
+          }
+
+          if (shouldAnalyze('seo')) {
+            performance.seo = {
+              title: $('title').text().trim(),
+              titleLength: $('title').text().trim().length,
+              metaDescription: $('meta[name="description"]').attr('content') || '',
+              metaDescriptionLength: ($('meta[name="description"]').attr('content') || '').length,
+              h1Count: $('h1').length,
+              h2Count: $('h2').length,
+              altTextMissing: $('img:not([alt])').length,
+              internalLinks: $('a[href^="/"], a[href*="' + new URL(url).hostname + '"]').length,
+              externalLinks: $('a[href^="http"]:not([href*="' + new URL(url).hostname + '"])').length,
+            };
+          }
+
+          if (shouldAnalyze('accessibility')) {
+            performance.accessibility = {
+              missingAltText: $('img:not([alt])').length,
+              emptyAltText: $('img[alt=""]').length,
+              missingLabels: $('input:not([aria-label]):not([aria-labelledby])').filter((_, el) => {
+                const id = $(el).attr('id');
+                return !id || !$(`label[for="${id}"]`).length;
+              }).length,
+              headingStructure: {
+                h1: $('h1').length,
+                h2: $('h2').length,
+                h3: $('h3').length,
+                h4: $('h4').length,
+                h5: $('h5').length,
+                h6: $('h6').length,
+              },
+            };
+          }
+
+          return {
+            content: [
+              {
+                type: 'text',
+                text: JSON.stringify(performance, null, 2),
+              },
+            ],
+          };
+        }
+
+        case 'generate_sitemap': {
+          const {
+            url,
+            maxDepth = 2,
+            maxPages = 50,
+            includeExternal = false,
+            useCache = true,
+          } = args as {
+            url: string;
+            maxDepth?: number;
+            maxPages?: number;
+            includeExternal?: boolean;
+            useCache?: boolean;
+          };
+
+          if (!url || typeof url !== 'string') {
+            throw new McpError(
+              ErrorCode.InvalidParams,
+              'URL parameter is required and must be a string'
+            );
+          }
+
+          const baseUrl = new URL(url);
+          const visited = new Set<string>();
+          const sitemap: any[] = [];
+          const queue: Array<{ url: string; depth: number }> = [{ url, depth: 0 }];
+
+          while (queue.length > 0 && sitemap.length < maxPages) {
+            const { url: currentUrl, depth } = queue.shift()!;
+            
+            if (visited.has(currentUrl) || depth > maxDepth) {
+              continue;
+            }
+
+            // Add delay between requests to avoid overwhelming the server
+            if (visited.size > 0) {
+              await new Promise(resolve => setTimeout(resolve, 100)); // 100ms delay
+            }
+
+            visited.add(currentUrl);
+
+            try {
+              const fetchResult = await fetchUrl(currentUrl, {
+                forceRefresh: !useCache,
+              });
+
+              const $ = cheerio.load(fetchResult.content);
+              const pageInfo: any = {
+                url: currentUrl,
+                depth,
+                title: $('title').text().trim(),
+                description: $('meta[name="description"]').attr('content') || '',
+                lastModified: new Date().toISOString(),
+                status: 'accessible',
+              };
+
+              sitemap.push(pageInfo);
+
+              // Extract links for next level
+              if (depth < maxDepth) {
+                $('a[href]').each((_, element) => {
+                  const href = $(element).attr('href');
+                  if (href) {
+                    try {
+                      const linkUrl = new URL(href, currentUrl).toString();
+                      const linkHost = new URL(linkUrl).hostname;
+                      
+                      // Only include same-domain links unless external is allowed
+                      if (includeExternal || linkHost === baseUrl.hostname) {
+                        if (!visited.has(linkUrl)) {
+                          queue.push({ url: linkUrl, depth: depth + 1 });
+                        }
+                      }
+                    } catch {
+                      // Skip invalid URLs
+                    }
+                  }
+                });
+              }
+            } catch (error) {
+              sitemap.push({
+                url: currentUrl,
+                depth,
+                status: 'error',
+                error: error instanceof Error ? error.message : 'Unknown error',
+              });
+            }
+          }
+
+          const result = {
+            baseUrl: url,
+            generatedAt: new Date().toISOString(),
+            maxDepth,
+            maxPages,
+            pagesFound: sitemap.length,
+            sitemap,
+            summary: {
+              accessible: sitemap.filter(p => p.status === 'accessible').length,
+              errors: sitemap.filter(p => p.status === 'error').length,
+              depthDistribution: Array.from({ length: maxDepth + 1 }, (_, i) => ({
+                depth: i,
+                count: sitemap.filter(p => p.depth === i).length,
+              })),
+            },
+          };
+
+          return {
+            content: [
+              {
+                type: 'text',
+                text: JSON.stringify(result, null, 2),
+              },
+            ],
+          };
+        }
+
+        case 'validate_html': {
+          const {
+            url,
+            checks = ['all'],
+            useCache = true,
+          } = args as {
+            url: string;
+            checks?: string[];
+            useCache?: boolean;
+          };
+
+          if (!url || typeof url !== 'string') {
+            throw new McpError(
+              ErrorCode.InvalidParams,
+              'URL parameter is required and must be a string'
+            );
+          }
+
+          const fetchResult = await fetchUrl(url, {
+            forceRefresh: !useCache,
+          });
+
+          const $ = cheerio.load(fetchResult.content);
+          const shouldCheck = (check: string) => 
+            checks.includes('all') || checks.includes(check);
+
+          const validation: any = {
+            url: fetchResult.url,
+            timestamp: new Date().toISOString(),
+            issues: [],
+            warnings: [],
+            summary: {},
+          };
+
+          if (shouldCheck('structure')) {
+            // Check basic HTML structure
+            if (!$('html').length) validation.issues.push('Missing <html> tag');
+            if (!$('head').length) validation.issues.push('Missing <head> tag');
+            if (!$('body').length) validation.issues.push('Missing <body> tag');
+            if (!$('title').length) validation.issues.push('Missing <title> tag');
+            if ($('title').length > 1) validation.issues.push('Multiple <title> tags found');
+            
+            // Check for duplicate IDs
+            const ids: string[] = [];
+            $('[id]').each((_, element) => {
+              const id = $(element).attr('id');
+              if (id) {
+                if (ids.includes(id)) {
+                  validation.issues.push(`Duplicate ID found: ${id}`);
+                } else {
+                  ids.push(id);
+                }
+              }
+            });
+          }
+
+          if (shouldCheck('accessibility')) {
+            // Check accessibility issues
+            $('img:not([alt])').each((_, element) => {
+              validation.issues.push(`Image missing alt attribute: ${$(element).attr('src') || 'unknown'}`);
+            });
+            
+            $('input:not([aria-label]):not([aria-labelledby])').each((_, element) => {
+              const id = $(element).attr('id');
+              if (!id || !$(`label[for="${id}"]`).length) {
+                validation.issues.push(`Input missing label: ${$(element).attr('name') || 'unknown'}`);
+              }
+            });
+            
+            if ($('h1').length === 0) validation.warnings.push('No H1 heading found');
+            if ($('h1').length > 1) validation.warnings.push('Multiple H1 headings found');
+          }
+
+          if (shouldCheck('seo')) {
+            // Check SEO issues
+            const title = $('title').text().trim();
+            if (title.length === 0) validation.issues.push('Empty title tag');
+            if (title.length > 60) validation.warnings.push('Title tag too long (>60 characters)');
+            if (title.length < 30) validation.warnings.push('Title tag too short (<30 characters)');
+            
+            const description = $('meta[name="description"]').attr('content') || '';
+            if (description.length === 0) validation.warnings.push('Missing meta description');
+            if (description.length > 160) validation.warnings.push('Meta description too long (>160 characters)');
+            if (description.length < 120) validation.warnings.push('Meta description too short (<120 characters)');
+          }
+
+          if (shouldCheck('performance')) {
+            // Check performance issues
+            const imageCount = $('img').length;
+            if (imageCount > 20) validation.warnings.push(`High number of images: ${imageCount}`);
+            
+            const scriptCount = $('script').length;
+            if (scriptCount > 10) validation.warnings.push(`High number of scripts: ${scriptCount}`);
+            
+            $('img:not([width]):not([height])').each((_, element) => {
+              validation.warnings.push(`Image without dimensions: ${$(element).attr('src') || 'unknown'}`);
+            });
+          }
+
+          validation.summary = {
+            totalIssues: validation.issues.length,
+            totalWarnings: validation.warnings.length,
+            checksPerformed: checks,
+            overallScore: Math.max(0, 100 - (validation.issues.length * 10) - (validation.warnings.length * 2)),
+          };
+
+          return {
+            content: [
+              {
+                type: 'text',
+                text: JSON.stringify(validation, null, 2),
               },
             ],
           };
