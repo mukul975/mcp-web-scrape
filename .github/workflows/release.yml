@@ -11,7 +11,8 @@ jobs:
     
     permissions:
       contents: write
-      id-token: write
+      id-token: write  # Required for OIDC token generation
+      packages: write  # Required for GitHub Packages publishing
     
     steps:
     - name: Checkout code
@@ -34,7 +35,15 @@ jobs:
     
     - name: Build project
       run: npm run build
-    
+
+    - name: Verify OIDC token
+      run: |
+        echo "OIDC Token available: ${{ !!secrets.GITHUB_TOKEN }}"
+        echo "Repository: ${{ github.repository }}"
+        echo "Ref: ${{ github.ref }}"
+        echo "SHA: ${{ github.sha }}"
+        echo "Actor: ${{ github.actor }}"
+
     - name: Extract version from tag
       id: version
       run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
@@ -91,10 +100,14 @@ jobs:
         cat temp_changelog.md >> CHANGELOG.md
         rm temp_changelog.md
     
-    - name: Publish to npm
-      run: npm publish --provenance --access public
+    - name: Publish to npm with OIDC provenance
+      run: |
+        echo "Publishing with OIDC provenance..."
+        npm publish --provenance --access public
+        echo "Package published successfully with provenance attestation"
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        NPM_CONFIG_PROVENANCE: true
     
     - name: Setup Node.js for GitHub Package Registry
       uses: actions/setup-node@v4
