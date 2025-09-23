@@ -7,11 +7,15 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub stars](https://img.shields.io/github/stars/mukul975/mcp-web-scrape.svg?style=social&label=Star)](https://github.com/mukul975/mcp-web-scrape)
 
+## 📦 Version
+
+**Current Version:** `1.0.1`
+
 ## 🎬 Demo
 
 ```bash
 # Extract content from any webpage
-npx mcp-web-scrape@latest
+npx mcp-web-scrape@1.0.1
 
 # Example: Extract from a news article
 > extract_content https://news.ycombinator.com
@@ -25,10 +29,13 @@ npx mcp-web-scrape@latest
 
 ```bash
 # Install globally
-npm install -g mcp-web-scrape
+npm install -g mcp-web-scrape@1.0.1
 
-# Try it instantly
+# Try it instantly (latest version)
 npx mcp-web-scrape@latest
+
+# Try specific version
+npx mcp-web-scrape@1.0.1
 
 # Or start HTTP server
 node dist/http.js
@@ -43,7 +50,7 @@ Add to your `~/Library/Application Support/ChatGPT/config.json`:
   "mcpServers": {
     "web-scrape": {
       "command": "npx",
-      "args": ["mcp-web-scrape@latest"]
+      "args": ["mcp-web-scrape@1.0.1"]
     }
   }
 }
@@ -58,10 +65,9 @@ Add to your `~/Library/Application Support/Claude/claude_desktop_config.json`:
   "mcpServers": {
     "web-scrape": {
       "command": "npx",
-      "args": ["mcp-web-scrape@latest"]
+      "args": ["mcp-web-scrape@1.0.1"]
     }
   }
-}
 ```
 
 ## 🛠️ Available Tools
