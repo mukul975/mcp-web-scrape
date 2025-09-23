@@ -68,6 +68,7 @@ Add to your `~/Library/Application Support/Claude/claude_desktop_config.json`:
       "args": ["mcp-web-scrape@1.0.1"]
     }
   }
+}
 ```
 
 ## 🛠️ Available Tools
@@ -120,10 +121,14 @@ Add to your `~/Library/Application Support/Claude/claude_desktop_config.json`:
 ## 📦 Installation
 
 ```bash
-npm install -g mcp-web-scrape
+# Install specific version
+npm install -g mcp-web-scrape@1.0.1
 
-# Or use directly
+# Or use directly (latest)
 npx mcp-web-scrape@latest
+
+# Or use specific version
+npx mcp-web-scrape@1.0.1
 ```
 
 ## 🔧 Configuration
