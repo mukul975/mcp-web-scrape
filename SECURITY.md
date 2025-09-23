@@ -1,245 +1,210 @@
 # Security Policy
 
-## Supported Versions
+## 🔒 Security Philosophy
+
+MCP Web Scrape is designed with security and responsible web scraping practices at its core. We prioritize:
+
+- **Robots.txt compliance** - respecting website policies
+- **Rate limiting** - preventing server overload
+- **No paywall bypass** - ethical content access only
+- **Safe content handling** - preventing XSS and injection attacks
+- **Privacy protection** - no sensitive data logging
+
+## 🛡️ Default Security Behaviors
+
+### Robots.txt Compliance
+
+- **Always checks** robots.txt before scraping
+- **Respects disallow rules** for the configured user agent
+- **Honors crawl delays** specified in robots.txt
+- **Fails safely** if robots.txt cannot be accessed
+
+```typescript
+// Example: Automatic robots.txt validation
+const isAllowed = await checkRobotsTxt(url, 'mcp-web-scrape');
+if (!isAllowed) {
+  throw new McpError(ErrorCode.InvalidRequest, 'Robots.txt disallows access');
+}
+```
+
+### Rate Limiting
+
+- **Per-domain rate limits** (default: 1 request/second)
+- **Configurable delays** between requests
+- **Exponential backoff** on rate limit errors
+- **Respect server response headers** (Retry-After, etc.)
+
+### Content Safety
+
+- **HTML sanitization** during Markdown conversion
+- **URL validation** to prevent SSRF attacks
+- **Content-Type checking** before processing
+- **Size limits** to prevent memory exhaustion
+
+### Privacy Protection
+
+- **No sensitive data logging** (URLs may be logged for debugging)
+- **Local caching only** - no external data transmission
+- **Configurable cache retention** periods
+- **Cache encryption** for sensitive content (optional)
+
+## 🚨 Supported Versions
+
+We provide security updates for the following versions:
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 1.0.x   | :white_check_mark: |
+| 1.x.x   | ✅ Active support  |
+| 0.9.x   | ⚠️ Critical fixes only |
+| < 0.9   | ❌ No longer supported |
 
-## Default Security Guardrails
+## 🐛 Reporting Security Vulnerabilities
 
-The MCP Web Scrape Server is designed with security and responsible behavior as core principles. The following guardrails are enabled by default:
+**Please do NOT report security vulnerabilities through public GitHub issues.**
 
-### 🤖 Robots.txt Compliance
+### Preferred Reporting Method
 
-- **Default Behavior**: Always checks and respects `robots.txt` files
-- **Bypass Option**: Available via `MCP_RESPECT_ROBOTS=false` or `bypassRobots` parameter
-- **Recommendation**: Only bypass when you have explicit permission or legitimate need
-- **Cache**: Robots.txt files are cached for 1 hour to reduce server load
+1. **Email**: Send details to `security@mcp-web-scrape.dev` (if available)
+2. **GitHub Security Advisories**: Use the [private vulnerability reporting](https://github.com/mukul975/mcp-web-scrape/security/advisories/new) feature
+3. **Encrypted communication**: PGP key available on request
 
-### 🚦 Rate Limiting
+### What to Include
 
-- **Per-Host Limits**: Maximum 30 requests per minute per hostname
-- **Backoff Strategy**: Automatically handles 429 (Too Many Requests) responses
-- **Configurable**: Adjust via `MCP_MAX_REQUESTS_PER_MINUTE` environment variable
-- **Memory-Based**: Rate limits reset on server restart
+- **Vulnerability description** - what is the security issue?
+- **Impact assessment** - what could an attacker achieve?
+- **Reproduction steps** - how to demonstrate the vulnerability
+- **Affected versions** - which releases are impacted
+- **Suggested fix** - if you have ideas for remediation
+- **Disclosure timeline** - your preferred timeline for public disclosure
 
-### 📏 Size and Time Limits
+### Example Report Template
 
-- **Download Size**: Limited to 5MB by default (`MCP_MAX_SIZE`)
-- **Request Timeout**: 30-second timeout prevents hanging requests (`MCP_TIMEOUT`)
-- **Content Truncation**: Long content is truncated with clear indication
-- **Memory Protection**: Prevents excessive memory usage from large responses
+```
+Subject: [SECURITY] Vulnerability in MCP Web Scrape v1.2.3
 
-### 🧹 Content Sanitization
+## Summary
+Brief description of the vulnerability
 
-- **Script Removal**: All `<script>` tags and JavaScript are stripped
-- **Style Removal**: CSS and `<style>` tags are removed
-- **Safe HTML**: Only content-relevant HTML elements are preserved
-- **XSS Prevention**: Output is safe for display in web interfaces
+## Impact
+- Confidentiality: [High/Medium/Low]
+- Integrity: [High/Medium/Low] 
+- Availability: [High/Medium/Low]
 
-### 🔒 Network Security
+## Reproduction
+1. Step one
+2. Step two
+3. Observe vulnerability
 
-- **HTTPS Preferred**: Automatically upgrades HTTP to HTTPS when possible
-- **Host Filtering**: Optional allowlist/blocklist for target domains
-- **User-Agent**: Clear identification as `mcp-web-scrape/1.0`
-- **No Credential Forwarding**: Does not send authentication headers
+## Affected Versions
+- Version X.Y.Z through A.B.C
 
-## What This Server Does NOT Do
+## Suggested Mitigation
+Your ideas for fixing the issue
 
-### ❌ No Authentication Bypass
-
-- Does not attempt to bypass login pages
-- Does not store or forward authentication credentials
-- Cannot access content behind paywalls or subscriptions
-- Respects HTTP authentication challenges
-
-### ❌ No Aggressive Crawling
-
-- Does not follow links automatically
-- Does not perform recursive site crawling
-- Does not ignore rate limiting or server responses
-- Does not attempt to overwhelm target servers
-
-### ❌ No Privacy Violations
-
-- Does not attempt to access private or internal networks
-- Does not bypass geographic restrictions
-- Does not store sensitive information from pages
-- Does not forward user-specific cookies or sessions
-
-### ❌ No Malicious Behavior
-
-- Does not attempt to exploit vulnerabilities
-- Does not perform port scanning or network reconnaissance
-- Does not inject malicious content into responses
-- Does not attempt to bypass security measures
-
-## Configuration Security
-
-### Environment Variables
-
-Sensitive configuration should be managed through environment variables:
-
-```bash
-# Safe to log/share
-MCP_HTTP_PORT=3000
-MCP_TIMEOUT=30000
-MCP_MAX_SIZE=5242880
-
-# Review before sharing
-MCP_ALLOWED_HOSTS="example.com,trusted-site.org"
-MCP_BLOCKED_HOSTS="malicious-site.com"
-
-# Security-sensitive
-MCP_RESPECT_ROBOTS=true  # Should remain true in production
+## Disclosure Timeline
+Preferred timeline for coordinated disclosure
 ```
 
-### Host Filtering
+## 🔄 Security Response Process
 
-Use host filtering to restrict which domains the server can access:
+### Our Commitment
 
-```bash
-# Allow only specific domains
-MCP_ALLOWED_HOSTS="wikipedia.org,github.com,stackoverflow.com"
+- **Acknowledgment**: Within 24 hours of report
+- **Initial assessment**: Within 72 hours
+- **Regular updates**: Every 7 days until resolution
+- **Coordinated disclosure**: Work with reporter on timeline
 
-# Block specific domains
-MCP_BLOCKED_HOSTS="malicious-site.com,spam-domain.net"
+### Response Timeline
 
-# Wildcard support
-MCP_ALLOWED_HOSTS="*.wikipedia.org,*.github.com"
-```
+1. **Day 0**: Vulnerability reported
+2. **Day 1**: Acknowledgment sent
+3. **Day 3**: Initial assessment and severity rating
+4. **Day 7**: Fix development begins (for confirmed issues)
+5. **Day 14-30**: Patch release (depending on severity)
+6. **Day 30-90**: Public disclosure (coordinated with reporter)
 
-### Production Deployment
+### Severity Levels
 
-For production deployments:
+- **Critical**: Remote code execution, data exfiltration
+- **High**: Privilege escalation, authentication bypass
+- **Medium**: Information disclosure, DoS attacks
+- **Low**: Minor information leaks, configuration issues
 
-1. **Enable Host Filtering**: Use `MCP_ALLOWED_HOSTS` to restrict target domains
-2. **Monitor Rate Limits**: Adjust `MCP_MAX_REQUESTS_PER_MINUTE` based on usage
-3. **Set Reasonable Limits**: Configure `MCP_MAX_SIZE` and `MCP_TIMEOUT` appropriately
-4. **Keep Robots Enabled**: Leave `MCP_RESPECT_ROBOTS=true` unless absolutely necessary
-5. **Use HTTPS**: Deploy behind HTTPS proxy for encrypted transport
-6. **Monitor Logs**: Watch for unusual access patterns or errors
+## 🏆 Security Hall of Fame
 
-## Cache Security
+We recognize security researchers who help improve MCP Web Scrape:
 
-### Data Storage
+<!-- Future contributors will be listed here -->
 
-- **In-Memory Only**: Cache is stored in memory, not persisted to disk
-- **Automatic Cleanup**: Old entries are automatically evicted (LRU)
-- **No Sensitive Data**: Only public web content is cached
-- **Clear on Restart**: All cached data is lost when server restarts
+*Be the first to help secure MCP Web Scrape!*
 
-### Cache Management
+## 🔧 Security Configuration
 
-- **Inspection**: Cache contents can be listed via MCP resources
-- **Selective Clearing**: Individual URLs can be removed from cache
-- **Bulk Clearing**: Entire cache can be cleared via `clear_cache` tool
-- **TTL Enforcement**: Cached content expires based on `MCP_CACHE_TTL`
+### Recommended Settings
 
-## HTTP Transport Security
-
-### CORS Configuration
-
-```javascript
-// Development: Allow all origins
-cors({ origin: true })
-
-// Production: Restrict origins
-cors({ 
-  origin: ['https://your-app.com', 'https://trusted-client.com'],
-  credentials: true 
-})
+```json
+{
+  "security": {
+    "respectRobotsTxt": true,
+    "userAgent": "mcp-web-scrape/1.0 (+https://github.com/mukul975/mcp-web-scrape)",
+    "rateLimitPerDomain": 1000,
+    "maxContentSize": "10MB",
+    "allowedProtocols": ["http", "https"],
+    "blockPrivateIPs": true,
+    "sanitizeContent": true
+  }
+}
 ```
 
 ### Security Headers
 
-The HTTP server includes security headers via Helmet.js:
+When running the HTTP server, we recommend these headers:
 
-- Content Security Policy (CSP)
-- X-Frame-Options
-- X-Content-Type-Options
-- Referrer-Policy
-- X-XSS-Protection
+```javascript
+// Express.js example
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000');
+  next();
+});
+```
 
-### Rate Limiting
+## 🚫 Out of Scope
 
-HTTP endpoints include additional rate limiting:
+The following are generally **not considered security vulnerabilities**:
 
-- Per-IP request limits
-- Burst protection
-- Automatic blocking of abusive clients
+- **Rate limiting bypasses** using multiple IPs/proxies
+- **Robots.txt violations** when explicitly configured to ignore
+- **Content extraction** from public, non-paywalled content
+- **Performance issues** that don't lead to DoS
+- **Social engineering** attacks against users
+- **Physical access** to systems running MCP Web Scrape
 
-## Reporting Security Vulnerabilities
+## 📚 Security Resources
 
-### Responsible Disclosure
+### Best Practices
 
-If you discover a security vulnerability, please report it responsibly:
+- [OWASP Web Scraping Security](https://owasp.org/www-project-web-security-testing-guide/)
+- [Responsible Web Scraping](https://blog.apify.com/web-scraping-ethics/)
+- [Robots.txt Specification](https://www.robotstxt.org/)
 
-1. **Do NOT** create a public GitHub issue
-2. **Do NOT** discuss the vulnerability publicly
-3. **Do** email security details to: [security@your-domain.com]
-4. **Do** provide clear reproduction steps
-5. **Do** allow reasonable time for response and fix
+### Security Tools
 
-### What to Include
+- **Static analysis**: ESLint security rules
+- **Dependency scanning**: npm audit, Snyk
+- **Runtime protection**: Helmet.js for HTTP servers
+- **Monitoring**: Application security monitoring
 
-- Description of the vulnerability
-- Steps to reproduce the issue
-- Potential impact assessment
-- Suggested fix (if known)
-- Your contact information
+## 📞 Contact Information
 
-### Response Timeline
-
-- **24 hours**: Initial acknowledgment
-- **72 hours**: Preliminary assessment
-- **7 days**: Detailed response with timeline
-- **30 days**: Target resolution (varies by severity)
-
-## Security Best Practices
-
-### For Developers
-
-1. **Input Validation**: Always validate URLs and parameters
-2. **Output Encoding**: Ensure safe output encoding for target format
-3. **Error Handling**: Don't leak sensitive information in error messages
-4. **Dependency Updates**: Keep dependencies updated for security patches
-5. **Code Review**: Review security-sensitive changes carefully
-
-### For Operators
-
-1. **Network Isolation**: Deploy in isolated network segments when possible
-2. **Monitoring**: Monitor for unusual traffic patterns or errors
-3. **Logging**: Log security-relevant events (blocked requests, rate limits)
-4. **Updates**: Keep the server updated with latest security patches
-5. **Backup**: Regularly backup configuration and monitor for changes
-
-### For Users
-
-1. **Trusted Sources**: Only fetch content from trusted domains
-2. **Review Output**: Review extracted content before using in applications
-3. **Rate Awareness**: Be mindful of rate limits and server resources
-4. **Robots Respect**: Keep robots.txt compliance enabled unless necessary
-5. **Report Issues**: Report suspicious behavior or potential security issues
-
-## Compliance Considerations
-
-### Legal Compliance
-
-- **Copyright**: Respect copyright and fair use guidelines
-- **Terms of Service**: Honor website terms of service
-- **Privacy Laws**: Comply with applicable privacy regulations
-- **Robots.txt**: Follow robots.txt directives (enabled by default)
-
-### Ethical Use
-
-- **Server Resources**: Don't overwhelm target servers
-- **Content Respect**: Use extracted content responsibly
-- **Attribution**: Maintain proper citations and source attribution
-- **Permission**: Obtain permission when required
+- **Security Email**: `security@mcp-web-scrape.dev` (if available)
+- **GitHub Security**: [Private vulnerability reporting](https://github.com/mukul975/mcp-web-scrape/security)
+- **Maintainer**: [@mukul975](https://github.com/mukul975)
 
 ---
 
 **Last Updated**: January 2024
-**Version**: 1.0.0
+
+**Note**: This security policy is subject to change. Please check back regularly for updates.

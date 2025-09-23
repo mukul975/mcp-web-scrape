@@ -10,14 +10,17 @@ RUN apk add --no-cache curl
 COPY package*.json ./
 COPY tsconfig.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Install all dependencies (including dev dependencies for build)
+RUN npm ci
 
 # Copy source code
 COPY src/ ./src/
 
 # Build the application
 RUN npm run build
+
+# Remove dev dependencies to reduce image size
+RUN npm prune --omit=dev
 
 # Create non-root user
 RUN addgroup -g 1001 -S nodejs
