@@ -28,7 +28,7 @@
     "dev": "tsc --watch",
     "start:stdio": "node dist/stdio.js",
     "start:http": "node dist/http.js",
-
+    "test": "echo \"No tests specified yet\" && exit 0",
     "clean": "rm -rf dist",
     "prepare": "npm run build"
   },
