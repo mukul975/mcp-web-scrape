@@ -208,27 +208,6 @@ Add to your `~/Library/Application Support/Claude/claude_desktop_config.json`:
 - ✅ **No paywall bypass** - ethical scraping only
 - ✅ **User-Agent identification** for transparency
 
-## 🚀 Roadmap
-
-- [x] **Core Web Scraping** - Extract clean content from web pages
-- [x] **Markdown Conversion** - Transform HTML to readable Markdown
-- [x] **Citation System** - Link extracted content to sources
-- [x] **Caching System** - Persistent storage with ETag support
-- [x] **Rate Limiting** - Respectful scraping with configurable delays
-- [x] **Robots.txt Compliance** - Ethical scraping practices
-- [x] **Advanced Extractors** - Forms, tables, social media, contact info
-- [x] **Content Analysis** - Headings, feeds, performance metrics
-- [x] **Site Monitoring** - Change detection and sitemap generation
-- [x] **HTML Validation** - Structure, accessibility, and SEO compliance
-- [x] **Content Transformation** - PDF conversion, text extraction, translation
-- [x] **Advanced Analysis** - Readability, sentiment, entity extraction
-- [x] **SEO & Marketing Tools** - Competitor analysis, schema markup, meta tags
-- [x] **Security & Privacy** - Vulnerability scanning, SSL checks, privacy analysis
-- [x] **Advanced Monitoring** - Uptime monitoring, traffic analysis, reporting
-- [ ] **Playwright Integration** - JavaScript rendering for SPAs
-- [ ] **Cache Viewer UI** - Web interface for cache management
-- [ ] **Custom Extractors** - Plugin system for specialized content
-- [ ] **Batch Processing** - Queue system for large-scale extraction
 
 ## 📦 Installation
 
