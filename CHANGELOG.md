@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.2] - 2024-12-19
+
+### Fixed
+- Fixed CSS selector syntax errors in social media detection
+- Improved username extraction from social media URLs
+- Eliminated false positives in social media link detection
+- Enhanced platform-specific regex patterns for accurate username parsing
+- Fixed contextual social media detection to prevent incorrect matches
+
 ### Added
 - Initial release of mcp-web-scrape
 - Web scraping tools for MCP (Model Context Protocol)

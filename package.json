@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mukul975/mcp-web-scrape.git"
+    "url": "git+https://github.com/mukul975/mcp-web-scrape.git"
   },
   "publishConfig": {
     "access": "public"
