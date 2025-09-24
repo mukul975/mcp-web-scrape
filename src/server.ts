@@ -1466,7 +1466,6 @@ export function createServer(): Server {
             includeImages = true,
             includeLinks = true,
             bypassRobots = false,
-            useCache = true,
           } = args as {
             url: string;
             format?: 'markdown' | 'text' | 'json';
@@ -1486,7 +1485,7 @@ export function createServer(): Server {
           // Fetch content
           const fetchResult = await fetchUrl(url, {
             bypassRobots,
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
 
           // Extract and format content
@@ -1589,7 +1588,7 @@ export function createServer(): Server {
         }
 
         case 'get_page_metadata': {
-          const { url, useCache = true } = args as {
+          const { url } = args as {
             url: string;
             useCache?: boolean;
           };
@@ -1702,7 +1701,6 @@ export function createServer(): Server {
             url,
             linkType = 'all',
             includeAnchorText = true,
-            useCache = true,
           } = args as {
             url: string;
             linkType?: 'all' | 'internal' | 'external';
@@ -1780,7 +1778,6 @@ export function createServer(): Server {
             url,
             includeAltText = true,
             includeDimensions = false,
-            useCache = true,
           } = args as {
             url: string;
             includeAltText?: boolean;
@@ -1796,7 +1793,7 @@ export function createServer(): Server {
           }
 
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
 
           const $ = cheerio.load(fetchResult.content);
@@ -2019,7 +2016,6 @@ export function createServer(): Server {
           const {
             url,
             dataTypes = ['json-ld', 'microdata', 'rdfa', 'opengraph'],
-            useCache = true,
           } = args as {
             url: string;
             dataTypes?: string[];
@@ -2034,7 +2030,7 @@ export function createServer(): Server {
           }
 
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
 
           const $ = cheerio.load(fetchResult.content);
@@ -2120,7 +2116,6 @@ export function createServer(): Server {
             url1,
             url2,
             compareType = 'text',
-            useCache = true,
           } = args as {
             url1: string;
             url2: string;
@@ -2143,8 +2138,8 @@ export function createServer(): Server {
           }
 
           const [fetchResult1, fetchResult2] = await Promise.all([
-            fetchUrl(url1, { forceRefresh: !useCache }),
-            fetchUrl(url2, { forceRefresh: !useCache }),
+            fetchUrl(url1, { forceRefresh: false }),
+            fetchUrl(url2, { forceRefresh: false }),
           ]);
 
           const extracted1 = extractContent(fetchResult1.content, fetchResult1.url);
@@ -2211,7 +2206,6 @@ export function createServer(): Server {
             urls,
             format = 'markdown',
             maxConcurrent = 3,
-            useCache = true,
           } = args as {
             urls: string[];
             format?: 'markdown' | 'text' | 'json';
@@ -2249,7 +2243,7 @@ export function createServer(): Server {
             const batchPromises = batch.map(async (url) => {
               try {
                 const fetchResult = await fetchUrl(url, {
-                  forceRefresh: !useCache,
+                  forceRefresh: false,
                 });
                 const extracted = extractContent(fetchResult.content, fetchResult.url, {
                   format,
@@ -2306,7 +2300,6 @@ export function createServer(): Server {
             url,
             includeHidden = false,
             includeDisabled = false,
-            useCache = true,
           } = args as {
             url: string;
             includeHidden?: boolean;
@@ -2322,7 +2315,7 @@ export function createServer(): Server {
           }
 
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
 
           const $ = cheerio.load(fetchResult.content);
@@ -2403,7 +2396,6 @@ export function createServer(): Server {
             format = 'json',
             includeHeaders = true,
             minRows = 1,
-            useCache = true,
           } = args as {
             url: string;
             format?: 'json' | 'csv' | 'markdown';
@@ -2420,7 +2412,7 @@ export function createServer(): Server {
           }
 
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
 
           const $ = cheerio.load(fetchResult.content);
@@ -2506,7 +2498,6 @@ export function createServer(): Server {
           const {
             url,
             platforms = ['all'],
-            useCache = true,
           } = args as {
             url: string;
             platforms?: string[];
@@ -2521,7 +2512,7 @@ export function createServer(): Server {
           }
 
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
 
           const $ = cheerio.load(fetchResult.content);
@@ -2589,7 +2580,6 @@ export function createServer(): Server {
           const {
             url,
             types = ['all'],
-            useCache = true,
           } = args as {
             url: string;
             types?: string[];
@@ -2604,7 +2594,7 @@ export function createServer(): Server {
           }
 
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
 
           const $ = cheerio.load(fetchResult.content);
@@ -2690,7 +2680,6 @@ export function createServer(): Server {
             url,
             levels = [1, 2, 3, 4, 5, 6],
             includeText = true,
-            useCache = true,
           } = args as {
             url: string;
             levels?: number[];
@@ -2706,7 +2695,7 @@ export function createServer(): Server {
           }
 
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
 
           const $ = cheerio.load(fetchResult.content);
@@ -2764,7 +2753,6 @@ export function createServer(): Server {
             url,
             maxItems = 10,
             includeContent = false,
-            useCache = true,
           } = args as {
             url: string;
             maxItems?: number;
@@ -2780,7 +2768,7 @@ export function createServer(): Server {
           }
 
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
 
           const $ = cheerio.load(fetchResult.content);
@@ -2810,7 +2798,7 @@ export function createServer(): Server {
           // Fetch and parse feeds
           for (const feedUrl of [...new Set(feedLinks)]) {
             try {
-              const feedResult = await fetchUrl(feedUrl, { forceRefresh: !useCache });
+              const feedResult = await fetchUrl(feedUrl, { forceRefresh: false });
               const feed$ = cheerio.load(feedResult.content, { xmlMode: true });
               
               const feedData: any = {
@@ -2868,7 +2856,6 @@ export function createServer(): Server {
             url,
             interval = 3600,
             threshold = 0.1,
-            useCache = true,
           } = args as {
             url: string;
             interval?: number;
@@ -2884,7 +2871,7 @@ export function createServer(): Server {
           }
 
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
 
           const $ = cheerio.load(fetchResult.content);
@@ -2949,7 +2936,6 @@ export function createServer(): Server {
           const {
             url,
             metrics = ['all'],
-            useCache = true,
           } = args as {
             url: string;
             metrics?: string[];
@@ -2965,7 +2951,7 @@ export function createServer(): Server {
 
           const startTime = Date.now();
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
           const endTime = Date.now();
 
@@ -3048,7 +3034,6 @@ export function createServer(): Server {
             maxDepth = 2,
             maxPages = 50,
             includeExternal = false,
-            useCache = true,
           } = args as {
             url: string;
             maxDepth?: number;
@@ -3085,7 +3070,7 @@ export function createServer(): Server {
 
             try {
               const fetchResult = await fetchUrl(currentUrl, {
-                forceRefresh: !useCache,
+                forceRefresh: false,
               });
 
               const $ = cheerio.load(fetchResult.content);
@@ -3162,7 +3147,6 @@ export function createServer(): Server {
           const {
             url,
             checks = ['all'],
-            useCache = true,
           } = args as {
             url: string;
             checks?: string[];
@@ -3177,7 +3161,7 @@ export function createServer(): Server {
           }
 
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
 
           const $ = cheerio.load(fetchResult.content);
@@ -3280,7 +3264,6 @@ export function createServer(): Server {
             url,
             format = 'A4',
             includeImages = true,
-            useCache = true,
           } = args as {
             url: string;
             format?: 'A4' | 'Letter' | 'Legal';
@@ -3296,7 +3279,7 @@ export function createServer(): Server {
           }
 
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
 
           const extracted = extractContent(fetchResult.content, fetchResult.url);
@@ -3327,7 +3310,6 @@ export function createServer(): Server {
           const {
             url,
             removeWhitespace = true,
-            useCache = true,
           } = args as {
             url: string;
             removeWhitespace?: boolean;
@@ -3342,7 +3324,7 @@ export function createServer(): Server {
           }
 
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
 
           const $ = cheerio.load(fetchResult.content);
@@ -3379,7 +3361,6 @@ export function createServer(): Server {
             url,
             maxWords = 100,
             minLength = 3,
-            useCache = true,
           } = args as {
             url: string;
             maxWords?: number;
@@ -3395,7 +3376,7 @@ export function createServer(): Server {
           }
 
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
 
           const extracted = extractContent(fetchResult.content, fetchResult.url);
@@ -3442,7 +3423,6 @@ export function createServer(): Server {
             url,
             targetLanguage,
             sourceLanguage,
-            useCache = true,
           } = args as {
             url: string;
             targetLanguage: string;
@@ -3465,7 +3445,7 @@ export function createServer(): Server {
           }
 
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
 
           const extracted = extractContent(fetchResult.content, fetchResult.url);
@@ -3497,7 +3477,6 @@ export function createServer(): Server {
             url,
             maxKeywords = 20,
             includePhrases = true,
-            useCache = true,
           } = args as {
             url: string;
             maxKeywords?: number;
@@ -3513,7 +3492,7 @@ export function createServer(): Server {
           }
 
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
 
           const extracted = extractContent(fetchResult.content, fetchResult.url);
@@ -3584,8 +3563,6 @@ export function createServer(): Server {
         case 'analyze_readability': {
           const {
             url,
-            metrics = ['all'],
-            useCache = true,
           } = args as {
             url: string;
             metrics?: string[];
@@ -3600,7 +3577,7 @@ export function createServer(): Server {
           }
 
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
 
           const extracted = extractContent(fetchResult.content, fetchResult.url);
@@ -3671,7 +3648,6 @@ export function createServer(): Server {
           const {
             url,
             confidence = 0.8,
-            useCache = true,
           } = args as {
             url: string;
             confidence?: number;
@@ -3686,7 +3662,7 @@ export function createServer(): Server {
           }
 
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
 
           const extracted = extractContent(fetchResult.content, fetchResult.url);
@@ -3753,7 +3729,6 @@ export function createServer(): Server {
           const {
             url,
             entityTypes = ['all'],
-            useCache = true,
           } = args as {
             url: string;
             entityTypes?: string[];
@@ -3768,7 +3743,7 @@ export function createServer(): Server {
           }
 
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
 
           const extracted = extractContent(fetchResult.content, fetchResult.url);
@@ -3820,7 +3795,6 @@ export function createServer(): Server {
           const {
             url,
             granularity = 'overall',
-            useCache = true,
           } = args as {
             url: string;
             granularity?: 'overall' | 'paragraph' | 'sentence';
@@ -3835,7 +3809,7 @@ export function createServer(): Server {
           }
 
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
 
           const extracted = extractContent(fetchResult.content, fetchResult.url);
@@ -3916,8 +3890,6 @@ export function createServer(): Server {
         case 'classify_content': {
           const {
             url,
-            categories = ['general'],
-            useCache = true,
           } = args as {
             url: string;
             categories?: string[];
@@ -3932,7 +3904,7 @@ export function createServer(): Server {
           }
 
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
 
           const extracted = extractContent(fetchResult.content, fetchResult.url);
@@ -4018,8 +3990,6 @@ export function createServer(): Server {
           const {
             url,
             competitors = [],
-            metrics = ['all'],
-            useCache = true,
           } = args as {
             url: string;
             competitors?: string[];
@@ -4034,17 +4004,10 @@ export function createServer(): Server {
             );
           }
 
-          const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
-          });
-
-          const extracted = extractContent(fetchResult.content, fetchResult.url);
-          const $ = cheerio.load(fetchResult.content);
-          
           // Analyze main site
           const analyzeWebsite = async (siteUrl: string) => {
             try {
-              const siteResult = await fetchUrl(siteUrl, { forceRefresh: !useCache });
+              const siteResult = await fetchUrl(siteUrl, { forceRefresh: false });
               const siteExtracted = extractContent(siteResult.content, siteResult.url);
               const site$ = cheerio.load(siteResult.content);
               
@@ -4146,8 +4109,6 @@ export function createServer(): Server {
         case 'extract_schema_markup': {
           const {
             url,
-            schemaTypes = ['all'],
-            useCache = true,
           } = args as {
             url: string;
             schemaTypes?: string[];
@@ -4162,7 +4123,7 @@ export function createServer(): Server {
           }
 
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
 
           const $ = cheerio.load(fetchResult.content);
@@ -4196,9 +4157,9 @@ export function createServer(): Server {
               let propValue = $prop.attr('content') || $prop.text().trim();
               
               if ($prop.is('img')) {
-                propValue = $prop.attr('src');
+                propValue = $prop.attr('src') || '';
               } else if ($prop.is('a')) {
-                propValue = $prop.attr('href');
+                propValue = $prop.attr('href') || '';
               }
               
               if (propName && propValue) {
@@ -4305,7 +4266,6 @@ export function createServer(): Server {
             url,
             checkExternal = false,
             maxLinks = 50,
-            useCache = true,
           } = args as {
             url: string;
             checkExternal?: boolean;
@@ -4321,7 +4281,7 @@ export function createServer(): Server {
           }
 
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
 
           const $ = cheerio.load(fetchResult.content);
@@ -4408,14 +4368,14 @@ export function createServer(): Server {
               text: link.text,
               type: link.type,
               status: link.status,
-              error: link.error,
+              error: (link as any).error || 'Unknown error',
             })),
             workingLinks: workingLinks.slice(0, 10).map(link => ({
               url: link.url,
               text: link.text,
               type: link.type,
               status: link.status,
-              responseTime: link.responseTime,
+              responseTime: (link as any).responseTime || 0,
             })),
             recommendations: [
               brokenLinks.length > 0 ? `Fix ${brokenLinks.length} broken links to improve user experience and SEO` : null,
@@ -4439,8 +4399,6 @@ export function createServer(): Server {
         case 'analyze_page_speed': {
           const {
             url,
-            metrics = ['all'],
-            useCache = true,
           } = args as {
             url: string;
             metrics?: string[];
@@ -4456,7 +4414,7 @@ export function createServer(): Server {
 
           const startTime = Date.now();
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
           const loadTime = Date.now() - startTime;
 
@@ -4563,7 +4521,6 @@ export function createServer(): Server {
             url,
             includeOpenGraph = true,
             includeTwitterCard = true,
-            useCache = true,
           } = args as {
             url: string;
             includeOpenGraph?: boolean;
@@ -4579,7 +4536,7 @@ export function createServer(): Server {
           }
 
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
 
           const extracted = extractContent(fetchResult.content, fetchResult.url);
@@ -4710,8 +4667,6 @@ export function createServer(): Server {
         case 'scan_vulnerabilities': {
           const {
             url,
-            scanTypes = ['all'],
-            useCache = true,
           } = args as {
             url: string;
             scanTypes?: string[];
@@ -4726,7 +4681,7 @@ export function createServer(): Server {
           }
 
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
 
           const $ = cheerio.load(fetchResult.content);
@@ -4875,8 +4830,6 @@ export function createServer(): Server {
         case 'check_ssl_certificate': {
           const {
             url,
-            checkChain = true,
-            useCache = true,
           } = args as {
             url: string;
             checkChain?: boolean;
@@ -5023,7 +4976,6 @@ export function createServer(): Server {
           const {
             url,
             includeThirdParty = true,
-            useCache = true,
           } = args as {
             url: string;
             includeThirdParty?: boolean;
@@ -5038,7 +4990,7 @@ export function createServer(): Server {
           }
 
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
 
           const $ = cheerio.load(fetchResult.content);
@@ -5189,7 +5141,6 @@ export function createServer(): Server {
           const {
             url,
             includeFingerprinting = true,
-            useCache = true,
           } = args as {
             url: string;
             includeFingerprinting?: boolean;
@@ -5204,7 +5155,7 @@ export function createServer(): Server {
           }
 
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
 
           const $ = cheerio.load(fetchResult.content);
@@ -5372,7 +5323,6 @@ export function createServer(): Server {
           const {
             url,
             checkCompliance = ['gdpr', 'ccpa'],
-            useCache = true,
           } = args as {
             url: string;
             checkCompliance?: string[];
@@ -5387,7 +5337,7 @@ export function createServer(): Server {
           }
 
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
 
           const $ = cheerio.load(fetchResult.content);
@@ -5464,7 +5414,7 @@ export function createServer(): Server {
           const complianceAnalysis: Record<string, any> = {};
           
           if (checkCompliance.includes('gdpr')) {
-            complianceAnalysis.gdpr = {
+            complianceAnalysis['gdpr'] = {
               hasPrivacyPolicy: privacyLinks.some(l => l.type === 'privacy_policy'),
               hasConsentMechanism: consentElements.cookieBanner,
               hasDataSubjectRights: policyAnalysis?.hasUserRights || false,
@@ -5474,12 +5424,12 @@ export function createServer(): Server {
             };
             
             // Calculate GDPR compliance score
-            const gdprChecks = Object.values(complianceAnalysis.gdpr).filter(v => v === true).length;
-            complianceAnalysis.gdpr.score = Math.round((gdprChecks / 5) * 100);
+            const gdprChecks = Object.values(complianceAnalysis['gdpr']).filter(v => v === true).length;
+            complianceAnalysis['gdpr'].score = Math.round((gdprChecks / 5) * 100);
           }
           
           if (checkCompliance.includes('ccpa')) {
-            complianceAnalysis.ccpa = {
+            complianceAnalysis['ccpa'] = {
               hasPrivacyPolicy: privacyLinks.some(l => l.type === 'privacy_policy'),
               hasOptOutMechanism: consentElements.optOutLinks,
               hasDataCategories: policyAnalysis?.hasDataCollection || false,
@@ -5489,8 +5439,8 @@ export function createServer(): Server {
             };
             
             // Calculate CCPA compliance score
-            const ccpaChecks = Object.values(complianceAnalysis.ccpa).filter(v => v === true).length;
-            complianceAnalysis.ccpa.score = Math.round((ccpaChecks / 5) * 100);
+            const ccpaChecks = Object.values(complianceAnalysis['ccpa']).filter(v => v === true).length;
+            complianceAnalysis['ccpa'].score = Math.round((ccpaChecks / 5) * 100);
           }
           
           const result = {
@@ -5527,12 +5477,9 @@ export function createServer(): Server {
           const {
             url,
             interval = 300,
-            timeout = 30,
-            useCache = true,
           } = args as {
             url: string;
             interval?: number;
-            timeout?: number;
             useCache?: boolean;
           };
 
@@ -5576,7 +5523,7 @@ export function createServer(): Server {
           const outages: Array<{ start: string; end: string; duration: number; reason: string }> = [];
           let currentOutage: { start: string; reason: string } | null = null;
           
-          checks.forEach((check, index) => {
+          checks.forEach((check) => {
             if (check.status === 'down' && !currentOutage) {
               currentOutage = { start: check.timestamp, reason: check.error || 'Unknown' };
             } else if (check.status === 'up' && currentOutage) {
@@ -5629,8 +5576,8 @@ export function createServer(): Server {
             outages: outages.slice(0, 10), // Last 10 outages
             trends: {
               hourlyStats,
-              worstHour: hourlyStats.length > 0 ? hourlyStats.reduce((worst, current) => current.uptime < worst.uptime ? current : worst, hourlyStats[0]) : null,
-              bestHour: hourlyStats.length > 0 ? hourlyStats.reduce((best, current) => current.uptime > best.uptime ? current : best, hourlyStats[0]) : null,
+              worstHour: hourlyStats.length > 0 ? hourlyStats.reduce((worst, current) => current.uptime < worst.uptime ? current : worst, hourlyStats[0]!) : null,
+              bestHour: hourlyStats.length > 0 ? hourlyStats.reduce((best, current) => current.uptime > best.uptime ? current : best, hourlyStats[0]!) : null,
             },
             alerts: [
               uptimePercentage < 99 ? { type: 'uptime', message: `Uptime below 99% (${uptimePercentage.toFixed(2)}%)`, severity: 'warning' } : null,
@@ -5657,7 +5604,6 @@ export function createServer(): Server {
             url,
             trackElements = ['text', 'images', 'links'],
             sensitivity = 'medium',
-            useCache = true,
           } = args as {
             url: string;
             trackElements?: string[];
@@ -5673,7 +5619,7 @@ export function createServer(): Server {
           }
 
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
 
           const $ = cheerio.load(fetchResult.content);
@@ -5974,15 +5920,15 @@ export function createServer(): Server {
                 direction: trendPercentage > 0 ? 'increasing' : 'decreasing',
                 significance: Math.abs(trendPercentage) > 10 ? 'significant' : 'moderate',
               },
-              peakDay: dailyTraffic.length > 0 ? dailyTraffic.reduce((peak, current) => current.pageviews > peak.pageviews ? current : peak, dailyTraffic[0]) : null,
-              lowestDay: dailyTraffic.length > 0 ? dailyTraffic.reduce((low, current) => current.pageviews < low.pageviews ? current : low, dailyTraffic[0]) : null,
+              peakDay: dailyTraffic.length > 0 ? dailyTraffic.reduce((peak, current) => current.pageviews > peak.pageviews ? current : peak, dailyTraffic[0]!) : null,
+              lowestDay: dailyTraffic.length > 0 ? dailyTraffic.reduce((low, current) => current.pageviews < low.pageviews ? current : low, dailyTraffic[0]!) : null,
             },
             insights: [
               trendPercentage > 10 ? `Traffic increased by ${trendPercentage.toFixed(1)}% compared to previous week` : null,
               trendPercentage < -10 ? `Traffic decreased by ${Math.abs(trendPercentage).toFixed(1)}% compared to previous week` : null,
               totals.avgBounceRate > 0.6 ? 'High bounce rate detected - consider improving page content' : null,
               deviceAnalytics.mobile.percentage > 50 ? 'Mobile traffic dominates - ensure mobile optimization' : null,
-              trafficSources.length > 0 && trafficSources[0].source === 'Organic Search' ? 'Strong SEO performance with high organic traffic' : null,
+              trafficSources.length > 0 && trafficSources[0]?.source === 'Organic Search' ? 'Strong SEO performance with high organic traffic' : null,
             ].filter(Boolean),
             analyzedAt: new Date().toISOString(),
             note: 'This is simulated traffic analytics data. Real implementation would integrate with analytics platforms like Google Analytics.',
@@ -6015,7 +5961,7 @@ export function createServer(): Server {
           }
 
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
 
           // Simulate performance metrics
@@ -6218,7 +6164,7 @@ export function createServer(): Server {
           }
 
           const fetchResult = await fetchUrl(url, {
-            forceRefresh: !useCache,
+            forceRefresh: false,
           });
 
           const $ = cheerio.load(fetchResult.content);

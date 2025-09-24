@@ -1428,14 +1428,14 @@ export function createServer() {
         try {
             switch (name) {
                 case 'extract_content': {
-                    const { url, format = 'markdown', includeImages = true, includeLinks = true, bypassRobots = false, useCache = true, } = args;
+                    const { url, format = 'markdown', includeImages = true, includeLinks = true, bypassRobots = false, } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     // Fetch content
                     const fetchResult = await fetchUrl(url, {
                         bypassRobots,
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     // Extract and format content
                     const extracted = extractContent(fetchResult.content, fetchResult.url, {
@@ -1517,7 +1517,7 @@ export function createServer() {
                     }
                 }
                 case 'get_page_metadata': {
-                    const { url, useCache = true } = args;
+                    const { url } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
@@ -1602,7 +1602,7 @@ export function createServer() {
                     }
                 }
                 case 'extract_links': {
-                    const { url, linkType = 'all', includeAnchorText = true, useCache = true, } = args;
+                    const { url, linkType = 'all', includeAnchorText = true, } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
@@ -1652,12 +1652,12 @@ export function createServer() {
                     };
                 }
                 case 'extract_images': {
-                    const { url, includeAltText = true, includeDimensions = false, useCache = true, } = args;
+                    const { url, includeAltText = true, includeDimensions = false, } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     const $ = cheerio.load(fetchResult.content);
                     const baseUrl = new URL(fetchResult.url);
@@ -1813,12 +1813,12 @@ export function createServer() {
                     }
                 }
                 case 'extract_structured_data': {
-                    const { url, dataTypes = ['json-ld', 'microdata', 'rdfa', 'opengraph'], useCache = true, } = args;
+                    const { url, dataTypes = ['json-ld', 'microdata', 'rdfa', 'opengraph'], } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     const $ = cheerio.load(fetchResult.content);
                     const structuredData = {
@@ -1893,7 +1893,7 @@ export function createServer() {
                     };
                 }
                 case 'compare_content': {
-                    const { url1, url2, compareType = 'text', useCache = true, } = args;
+                    const { url1, url2, compareType = 'text', } = args;
                     if (!url1 || typeof url1 !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'url1 parameter is required and must be a string');
                     }
@@ -1901,8 +1901,8 @@ export function createServer() {
                         throw new McpError(ErrorCode.InvalidParams, 'url2 parameter is required and must be a string');
                     }
                     const [fetchResult1, fetchResult2] = await Promise.all([
-                        fetchUrl(url1, { forceRefresh: !useCache }),
-                        fetchUrl(url2, { forceRefresh: !useCache }),
+                        fetchUrl(url1, { forceRefresh: false }),
+                        fetchUrl(url2, { forceRefresh: false }),
                     ]);
                     const extracted1 = extractContent(fetchResult1.content, fetchResult1.url);
                     const extracted2 = extractContent(fetchResult2.content, fetchResult2.url);
@@ -1959,7 +1959,7 @@ export function createServer() {
                     };
                 }
                 case 'batch_extract': {
-                    const { urls, format = 'markdown', maxConcurrent = 3, useCache = true, } = args;
+                    const { urls, format = 'markdown', maxConcurrent = 3, } = args;
                     if (!Array.isArray(urls) || urls.length === 0) {
                         throw new McpError(ErrorCode.InvalidParams, 'urls parameter is required and must be a non-empty array');
                     }
@@ -1977,7 +1977,7 @@ export function createServer() {
                         const batchPromises = batch.map(async (url) => {
                             try {
                                 const fetchResult = await fetchUrl(url, {
-                                    forceRefresh: !useCache,
+                                    forceRefresh: false,
                                 });
                                 const extracted = extractContent(fetchResult.content, fetchResult.url, {
                                     format,
@@ -2027,12 +2027,12 @@ export function createServer() {
                     };
                 }
                 case 'extract_forms': {
-                    const { url, includeHidden = false, includeDisabled = false, useCache = true, } = args;
+                    const { url, includeHidden = false, includeDisabled = false, } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     const $ = cheerio.load(fetchResult.content);
                     const forms = [];
@@ -2100,12 +2100,12 @@ export function createServer() {
                     };
                 }
                 case 'extract_tables': {
-                    const { url, format = 'json', includeHeaders = true, minRows = 1, useCache = true, } = args;
+                    const { url, format = 'json', includeHeaders = true, minRows = 1, } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     const $ = cheerio.load(fetchResult.content);
                     const tables = [];
@@ -2177,12 +2177,12 @@ export function createServer() {
                     };
                 }
                 case 'extract_social_media': {
-                    const { url, platforms = ['all'], useCache = true, } = args;
+                    const { url, platforms = ['all'], } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     const $ = cheerio.load(fetchResult.content);
                     const socialLinks = {};
@@ -2238,12 +2238,12 @@ export function createServer() {
                     };
                 }
                 case 'extract_contact_info': {
-                    const { url, types = ['all'], useCache = true, } = args;
+                    const { url, types = ['all'], } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     const $ = cheerio.load(fetchResult.content);
                     const contactInfo = {};
@@ -2313,12 +2313,12 @@ export function createServer() {
                     };
                 }
                 case 'extract_headings': {
-                    const { url, levels = [1, 2, 3, 4, 5, 6], includeText = true, useCache = true, } = args;
+                    const { url, levels = [1, 2, 3, 4, 5, 6], includeText = true, } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     const $ = cheerio.load(fetchResult.content);
                     const headings = [];
@@ -2365,12 +2365,12 @@ export function createServer() {
                     };
                 }
                 case 'extract_feeds': {
-                    const { url, maxItems = 10, includeContent = false, useCache = true, } = args;
+                    const { url, maxItems = 10, includeContent = false, } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     const $ = cheerio.load(fetchResult.content);
                     const feeds = [];
@@ -2397,7 +2397,7 @@ export function createServer() {
                     // Fetch and parse feeds
                     for (const feedUrl of [...new Set(feedLinks)]) {
                         try {
-                            const feedResult = await fetchUrl(feedUrl, { forceRefresh: !useCache });
+                            const feedResult = await fetchUrl(feedUrl, { forceRefresh: false });
                             const feed$ = cheerio.load(feedResult.content, { xmlMode: true });
                             const feedData = {
                                 url: feedUrl,
@@ -2444,12 +2444,12 @@ export function createServer() {
                     };
                 }
                 case 'monitor_changes': {
-                    const { url, interval = 3600, threshold = 0.1, useCache = true, } = args;
+                    const { url, interval = 3600, threshold = 0.1, } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     const $ = cheerio.load(fetchResult.content);
                     const currentContent = $.text().trim();
@@ -2503,13 +2503,13 @@ export function createServer() {
                     };
                 }
                 case 'analyze_performance': {
-                    const { url, metrics = ['all'], useCache = true, } = args;
+                    const { url, metrics = ['all'], } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     const startTime = Date.now();
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     const endTime = Date.now();
                     const $ = cheerio.load(fetchResult.content);
@@ -2578,7 +2578,7 @@ export function createServer() {
                     };
                 }
                 case 'generate_sitemap': {
-                    const { url, maxDepth = 2, maxPages = 50, includeExternal = false, useCache = true, } = args;
+                    const { url, maxDepth = 2, maxPages = 50, includeExternal = false, } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
@@ -2598,7 +2598,7 @@ export function createServer() {
                         visited.add(currentUrl);
                         try {
                             const fetchResult = await fetchUrl(currentUrl, {
-                                forceRefresh: !useCache,
+                                forceRefresh: false,
                             });
                             const $ = cheerio.load(fetchResult.content);
                             const pageInfo = {
@@ -2667,12 +2667,12 @@ export function createServer() {
                     };
                 }
                 case 'validate_html': {
-                    const { url, checks = ['all'], useCache = true, } = args;
+                    const { url, checks = ['all'], } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     const $ = cheerio.load(fetchResult.content);
                     const shouldCheck = (check) => checks.includes('all') || checks.includes(check);
@@ -2771,12 +2771,12 @@ export function createServer() {
                 }
                 // Content Transformation Tools
                 case 'convert_to_pdf': {
-                    const { url, format = 'A4', includeImages = true, useCache = true, } = args;
+                    const { url, format = 'A4', includeImages = true, } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     const extracted = extractContent(fetchResult.content, fetchResult.url);
                     // Simulate PDF conversion (in a real implementation, you'd use a library like puppeteer)
@@ -2800,12 +2800,12 @@ export function createServer() {
                     };
                 }
                 case 'extract_text_only': {
-                    const { url, removeWhitespace = true, useCache = true, } = args;
+                    const { url, removeWhitespace = true, } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     const $ = cheerio.load(fetchResult.content);
                     // Remove script and style elements
@@ -2831,12 +2831,12 @@ export function createServer() {
                     };
                 }
                 case 'generate_word_cloud': {
-                    const { url, maxWords = 100, minLength = 3, useCache = true, } = args;
+                    const { url, maxWords = 100, minLength = 3, } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     const extracted = extractContent(fetchResult.content, fetchResult.url);
                     // Extract words and count frequency
@@ -2872,7 +2872,7 @@ export function createServer() {
                     };
                 }
                 case 'translate_content': {
-                    const { url, targetLanguage, sourceLanguage, useCache = true, } = args;
+                    const { url, targetLanguage, sourceLanguage, } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
@@ -2880,7 +2880,7 @@ export function createServer() {
                         throw new McpError(ErrorCode.InvalidParams, 'targetLanguage parameter is required and must be a string');
                     }
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     const extracted = extractContent(fetchResult.content, fetchResult.url);
                     // Simulate translation (in a real implementation, you'd use a translation API)
@@ -2904,12 +2904,12 @@ export function createServer() {
                     };
                 }
                 case 'extract_keywords': {
-                    const { url, maxKeywords = 20, includePhrases = true, useCache = true, } = args;
+                    const { url, maxKeywords = 20, includePhrases = true, } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     const extracted = extractContent(fetchResult.content, fetchResult.url);
                     const $ = cheerio.load(fetchResult.content);
@@ -2967,12 +2967,12 @@ export function createServer() {
                 }
                 // Advanced Analysis Tools
                 case 'analyze_readability': {
-                    const { url, metrics = ['all'], useCache = true, } = args;
+                    const { url, } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     const extracted = extractContent(fetchResult.content, fetchResult.url);
                     const text = extracted.content.replace(/[\[\]\(\)\*_`#]/g, ' ');
@@ -3030,12 +3030,12 @@ export function createServer() {
                     };
                 }
                 case 'detect_language': {
-                    const { url, confidence = 0.8, useCache = true, } = args;
+                    const { url, confidence = 0.8, } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     const extracted = extractContent(fetchResult.content, fetchResult.url);
                     const $ = cheerio.load(fetchResult.content);
@@ -3088,12 +3088,12 @@ export function createServer() {
                     };
                 }
                 case 'extract_entities': {
-                    const { url, entityTypes = ['all'], useCache = true, } = args;
+                    const { url, entityTypes = ['all'], } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     const extracted = extractContent(fetchResult.content, fetchResult.url);
                     // Simple entity extraction using regex patterns
@@ -3133,12 +3133,12 @@ export function createServer() {
                     };
                 }
                 case 'sentiment_analysis': {
-                    const { url, granularity = 'overall', useCache = true, } = args;
+                    const { url, granularity = 'overall', } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     const extracted = extractContent(fetchResult.content, fetchResult.url);
                     // Simple sentiment analysis using word lists
@@ -3209,12 +3209,12 @@ export function createServer() {
                     };
                 }
                 case 'classify_content': {
-                    const { url, categories = ['general'], useCache = true, } = args;
+                    const { url, } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     const extracted = extractContent(fetchResult.content, fetchResult.url);
                     const $ = cheerio.load(fetchResult.content);
@@ -3284,19 +3284,14 @@ export function createServer() {
                 }
                 // SEO & Marketing Tools
                 case 'analyze_competitors': {
-                    const { url, competitors = [], metrics = ['all'], useCache = true, } = args;
+                    const { url, competitors = [], } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
-                    const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
-                    });
-                    const extracted = extractContent(fetchResult.content, fetchResult.url);
-                    const $ = cheerio.load(fetchResult.content);
                     // Analyze main site
                     const analyzeWebsite = async (siteUrl) => {
                         try {
-                            const siteResult = await fetchUrl(siteUrl, { forceRefresh: !useCache });
+                            const siteResult = await fetchUrl(siteUrl, { forceRefresh: false });
                             const siteExtracted = extractContent(siteResult.content, siteResult.url);
                             const site$ = cheerio.load(siteResult.content);
                             return {
@@ -3388,12 +3383,12 @@ export function createServer() {
                     };
                 }
                 case 'extract_schema_markup': {
-                    const { url, schemaTypes = ['all'], useCache = true, } = args;
+                    const { url, } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     const $ = cheerio.load(fetchResult.content);
                     // Extract JSON-LD structured data
@@ -3422,10 +3417,10 @@ export function createServer() {
                             const propName = $prop.attr('itemprop');
                             let propValue = $prop.attr('content') || $prop.text().trim();
                             if ($prop.is('img')) {
-                                propValue = $prop.attr('src');
+                                propValue = $prop.attr('src') || '';
                             }
                             else if ($prop.is('a')) {
-                                propValue = $prop.attr('href');
+                                propValue = $prop.attr('href') || '';
                             }
                             if (propName && propValue) {
                                 properties[propName] = propValue;
@@ -3518,12 +3513,12 @@ export function createServer() {
                     };
                 }
                 case 'check_broken_links': {
-                    const { url, checkExternal = false, maxLinks = 50, useCache = true, } = args;
+                    const { url, checkExternal = false, maxLinks = 50, } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     const $ = cheerio.load(fetchResult.content);
                     const baseUrl = new URL(fetchResult.url);
@@ -3600,14 +3595,14 @@ export function createServer() {
                             text: link.text,
                             type: link.type,
                             status: link.status,
-                            error: link.error,
+                            error: link.error || 'Unknown error',
                         })),
                         workingLinks: workingLinks.slice(0, 10).map(link => ({
                             url: link.url,
                             text: link.text,
                             type: link.type,
                             status: link.status,
-                            responseTime: link.responseTime,
+                            responseTime: link.responseTime || 0,
                         })),
                         recommendations: [
                             brokenLinks.length > 0 ? `Fix ${brokenLinks.length} broken links to improve user experience and SEO` : null,
@@ -3627,13 +3622,13 @@ export function createServer() {
                     };
                 }
                 case 'analyze_page_speed': {
-                    const { url, metrics = ['all'], useCache = true, } = args;
+                    const { url, } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     const startTime = Date.now();
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     const loadTime = Date.now() - startTime;
                     const $ = cheerio.load(fetchResult.content);
@@ -3733,12 +3728,12 @@ export function createServer() {
                     };
                 }
                 case 'generate_meta_tags': {
-                    const { url, includeOpenGraph = true, includeTwitterCard = true, useCache = true, } = args;
+                    const { url, includeOpenGraph = true, includeTwitterCard = true, } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     const extracted = extractContent(fetchResult.content, fetchResult.url);
                     const $ = cheerio.load(fetchResult.content);
@@ -3853,12 +3848,12 @@ export function createServer() {
                 }
                 // Security & Privacy Tools
                 case 'scan_vulnerabilities': {
-                    const { url, scanTypes = ['all'], useCache = true, } = args;
+                    const { url, } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     const $ = cheerio.load(fetchResult.content);
                     // Security vulnerability checks
@@ -3988,7 +3983,7 @@ export function createServer() {
                     };
                 }
                 case 'check_ssl_certificate': {
-                    const { url, checkChain = true, useCache = true, } = args;
+                    const { url, } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
@@ -4111,12 +4106,12 @@ export function createServer() {
                     };
                 }
                 case 'analyze_cookies': {
-                    const { url, includeThirdParty = true, useCache = true, } = args;
+                    const { url, includeThirdParty = true, } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     const $ = cheerio.load(fetchResult.content);
                     const domain = new URL(fetchResult.url).hostname;
@@ -4251,12 +4246,12 @@ export function createServer() {
                     };
                 }
                 case 'detect_tracking': {
-                    const { url, includeFingerprinting = true, useCache = true, } = args;
+                    const { url, includeFingerprinting = true, } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     const $ = cheerio.load(fetchResult.content);
                     // Detect tracking scripts and pixels
@@ -4406,12 +4401,12 @@ export function createServer() {
                     };
                 }
                 case 'check_privacy_policy': {
-                    const { url, checkCompliance = ['gdpr', 'ccpa'], useCache = true, } = args;
+                    const { url, checkCompliance = ['gdpr', 'ccpa'], } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     const $ = cheerio.load(fetchResult.content);
                     // Find privacy policy links
@@ -4477,7 +4472,7 @@ export function createServer() {
                     // Compliance analysis
                     const complianceAnalysis = {};
                     if (checkCompliance.includes('gdpr')) {
-                        complianceAnalysis.gdpr = {
+                        complianceAnalysis['gdpr'] = {
                             hasPrivacyPolicy: privacyLinks.some(l => l.type === 'privacy_policy'),
                             hasConsentMechanism: consentElements.cookieBanner,
                             hasDataSubjectRights: policyAnalysis?.hasUserRights || false,
@@ -4486,11 +4481,11 @@ export function createServer() {
                             score: 0,
                         };
                         // Calculate GDPR compliance score
-                        const gdprChecks = Object.values(complianceAnalysis.gdpr).filter(v => v === true).length;
-                        complianceAnalysis.gdpr.score = Math.round((gdprChecks / 5) * 100);
+                        const gdprChecks = Object.values(complianceAnalysis['gdpr']).filter(v => v === true).length;
+                        complianceAnalysis['gdpr'].score = Math.round((gdprChecks / 5) * 100);
                     }
                     if (checkCompliance.includes('ccpa')) {
-                        complianceAnalysis.ccpa = {
+                        complianceAnalysis['ccpa'] = {
                             hasPrivacyPolicy: privacyLinks.some(l => l.type === 'privacy_policy'),
                             hasOptOutMechanism: consentElements.optOutLinks,
                             hasDataCategories: policyAnalysis?.hasDataCollection || false,
@@ -4499,8 +4494,8 @@ export function createServer() {
                             score: 0,
                         };
                         // Calculate CCPA compliance score
-                        const ccpaChecks = Object.values(complianceAnalysis.ccpa).filter(v => v === true).length;
-                        complianceAnalysis.ccpa.score = Math.round((ccpaChecks / 5) * 100);
+                        const ccpaChecks = Object.values(complianceAnalysis['ccpa']).filter(v => v === true).length;
+                        complianceAnalysis['ccpa'].score = Math.round((ccpaChecks / 5) * 100);
                     }
                     const result = {
                         url: fetchResult.url,
@@ -4531,7 +4526,7 @@ export function createServer() {
                 }
                 // Advanced Monitoring Tools
                 case 'monitor_uptime': {
-                    const { url, interval = 300, timeout = 30, useCache = true, } = args;
+                    const { url, interval = 300, } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
@@ -4562,7 +4557,7 @@ export function createServer() {
                     // Detect outages
                     const outages = [];
                     let currentOutage = null;
-                    checks.forEach((check, index) => {
+                    checks.forEach((check) => {
                         if (check.status === 'down' && !currentOutage) {
                             currentOutage = { start: check.timestamp, reason: check.error || 'Unknown' };
                         }
@@ -4634,12 +4629,12 @@ export function createServer() {
                     };
                 }
                 case 'track_changes_detailed': {
-                    const { url, trackElements = ['text', 'images', 'links'], sensitivity = 'medium', useCache = true, } = args;
+                    const { url, trackElements = ['text', 'images', 'links'], sensitivity = 'medium', } = args;
                     if (!url || typeof url !== 'string') {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     const $ = cheerio.load(fetchResult.content);
                     // Simulate previous version for comparison
@@ -4907,7 +4902,7 @@ export function createServer() {
                             trendPercentage < -10 ? `Traffic decreased by ${Math.abs(trendPercentage).toFixed(1)}% compared to previous week` : null,
                             totals.avgBounceRate > 0.6 ? 'High bounce rate detected - consider improving page content' : null,
                             deviceAnalytics.mobile.percentage > 50 ? 'Mobile traffic dominates - ensure mobile optimization' : null,
-                            trafficSources.length > 0 && trafficSources[0].source === 'Organic Search' ? 'Strong SEO performance with high organic traffic' : null,
+                            trafficSources.length > 0 && trafficSources[0]?.source === 'Organic Search' ? 'Strong SEO performance with high organic traffic' : null,
                         ].filter(Boolean),
                         analyzedAt: new Date().toISOString(),
                         note: 'This is simulated traffic analytics data. Real implementation would integrate with analytics platforms like Google Analytics.',
@@ -4927,7 +4922,7 @@ export function createServer() {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     // Simulate performance metrics
                     const performanceMetrics = {
@@ -5107,7 +5102,7 @@ export function createServer() {
                         throw new McpError(ErrorCode.InvalidParams, 'URL parameter is required and must be a string');
                     }
                     const fetchResult = await fetchUrl(url, {
-                        forceRefresh: !useCache,
+                        forceRefresh: false,
                     });
                     const $ = cheerio.load(fetchResult.content);
                     const reportId = `report_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;

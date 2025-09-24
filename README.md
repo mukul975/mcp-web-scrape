@@ -25,7 +25,7 @@ npx mcp-web-scrape@1.0.1
 
 *Transform messy HTML into clean, agent-ready Markdown with automatic citations*
 
-## 🎯 New Tool Examples
+## 🎯 Tool Examples
 
 ```bash
 # Extract all forms from a webpage
@@ -40,17 +40,29 @@ npx mcp-web-scrape@1.0.1
 > extract_social_media https://company.com
 ✅ Found Twitter, LinkedIn, Facebook profiles
 
-# Monitor page changes
-> monitor_changes https://news.site.com --interval 3600
-✅ Tracking changes every hour
+# Analyze sentiment of content
+> sentiment_analysis https://blog.example.com/article
+✅ Sentiment: Positive (0.85), Emotional tone: Optimistic
 
-# Analyze page performance
-> analyze_performance https://mysite.com
-✅ Load time: 2.3s, SEO score: 85/100
+# Extract named entities
+> extract_entities https://news.example.com/article
+✅ Found 12 people, 8 organizations, 5 locations
 
-# Generate sitemap
-> generate_sitemap https://website.com --max-depth 3
-✅ Generated sitemap with 156 pages
+# Check for security vulnerabilities
+> scan_vulnerabilities https://mysite.com
+✅ No XSS vulnerabilities found, 2 header improvements suggested
+
+# Analyze competitor SEO
+> analyze_competitors ["https://competitor1.com", "https://competitor2.com"]
+✅ Competitor analysis complete: keyword gaps identified
+
+# Monitor uptime and performance
+> monitor_uptime https://mysite.com --interval 300
+✅ Uptime: 99.9%, Average response: 245ms
+
+# Generate comprehensive report
+> generate_reports https://website.com --metrics ["seo", "performance", "security"]
+✅ Generated 15-page analysis report
 ```
 
 ## ⚡ Quick Start
@@ -128,6 +140,51 @@ Add to your `~/Library/Application Support/Claude/claude_desktop_config.json`:
 | `extract_headings` | Analyze heading structure (H1-H6) for content hierarchy |
 | `extract_feeds` | Discover and parse RSS/Atom feeds |
 
+### Content Transformation Tools
+| Tool | Description |
+|------|-------------|
+| `convert_to_pdf` | Convert web pages to PDF format with customizable settings |
+| `extract_text_only` | Extract plain text content without formatting or HTML |
+| `generate_word_cloud` | Generate word frequency analysis and word cloud data |
+| `translate_content` | Translate web page content to different languages |
+| `extract_keywords` | Extract important keywords and phrases from content |
+
+### Advanced Analysis Tools
+| Tool | Description |
+|------|-------------|
+| `analyze_readability` | Analyze text readability using various metrics (Flesch, Gunning-Fog, etc.) |
+| `detect_language` | Detect the primary language of web page content |
+| `extract_entities` | Extract named entities (people, places, organizations) |
+| `sentiment_analysis` | Analyze sentiment and emotional tone of content |
+| `classify_content` | Classify content into categories and topics |
+
+### SEO & Marketing Tools
+| Tool | Description |
+|------|-------------|
+| `analyze_competitors` | Analyze competitor websites for SEO and content insights |
+| `extract_schema_markup` | Extract and validate schema.org structured data |
+| `check_broken_links` | Check for broken links and redirects on pages |
+| `analyze_page_speed` | Analyze page loading speed and performance metrics |
+| `generate_meta_tags` | Generate optimized meta tags for SEO |
+
+### Security & Privacy Tools
+| Tool | Description |
+|------|-------------|
+| `scan_vulnerabilities` | Scan pages for common security vulnerabilities |
+| `check_ssl_certificate` | Check SSL certificate validity and security details |
+| `analyze_cookies` | Analyze cookies and tracking mechanisms |
+| `detect_tracking` | Detect tracking scripts and privacy concerns |
+| `check_privacy_policy` | Analyze privacy policy compliance and coverage |
+
+### Advanced Monitoring Tools
+| Tool | Description |
+|------|-------------|
+| `monitor_uptime` | Monitor website uptime and availability |
+| `track_changes_detailed` | Advanced change tracking with similarity analysis |
+| `analyze_traffic_patterns` | Analyze website traffic patterns and trends |
+| `benchmark_performance` | Benchmark performance against competitors |
+| `generate_reports` | Generate comprehensive analysis reports |
+
 ### Analysis & Monitoring Tools
 | Tool | Description |
 |------|-------------|
@@ -163,8 +220,12 @@ Add to your `~/Library/Application Support/Claude/claude_desktop_config.json`:
 - [x] **Content Analysis** - Headings, feeds, performance metrics
 - [x] **Site Monitoring** - Change detection and sitemap generation
 - [x] **HTML Validation** - Structure, accessibility, and SEO compliance
+- [x] **Content Transformation** - PDF conversion, text extraction, translation
+- [x] **Advanced Analysis** - Readability, sentiment, entity extraction
+- [x] **SEO & Marketing Tools** - Competitor analysis, schema markup, meta tags
+- [x] **Security & Privacy** - Vulnerability scanning, SSL checks, privacy analysis
+- [x] **Advanced Monitoring** - Uptime monitoring, traffic analysis, reporting
 - [ ] **Playwright Integration** - JavaScript rendering for SPAs
-- [ ] **PDF Snapshots** - Archive pages as searchable PDFs
 - [ ] **Cache Viewer UI** - Web interface for cache management
 - [ ] **Custom Extractors** - Plugin system for specialized content
 - [ ] **Batch Processing** - Queue system for large-scale extraction
