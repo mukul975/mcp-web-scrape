@@ -1,15 +1,15 @@
 /**
- * Caching system for MCP Web Scrape Server
- * Handles HTTP caching with ETags and Last-Modified headers
- */
+  * Caching system for MCP Web Scrape Server
+  * Handles HTTP caching with ETags and Last-Modified headers
+  */
 import { config } from './config.js';
 class ContentCache {
     cache = new Map();
     accessOrder = new Map(); // For LRU eviction
     accessCounter = 0;
     /**
-     * Get a cache entry by URL
-     */
+      * Get a cache entry by URL
+      */
     get(url) {
         const entry = this.cache.get(url);
         if (entry) {
@@ -28,8 +28,8 @@ class ContentCache {
         return undefined;
     }
     /**
-     * Set a cache entry
-     */
+      * Set a cache entry
+      */
     set(entry) {
         // Ensure we don't exceed max cache size
         this.enforceMaxSize();
@@ -37,22 +37,22 @@ class ContentCache {
         this.accessOrder.set(entry.url, ++this.accessCounter);
     }
     /**
-     * Delete a cache entry
-     */
+      * Delete a cache entry
+      */
     delete(url) {
         this.accessOrder.delete(url);
         return this.cache.delete(url);
     }
     /**
-     * Check if an entry is still valid based on TTL
-     */
+      * Check if an entry is still valid based on TTL
+      */
     isEntryValid(entry) {
         const age = Date.now() - entry.timestamp;
         return age < (config.cacheTtl * 1000);
     }
     /**
-     * Enforce maximum cache size using LRU eviction
-     */
+      * Enforce maximum cache size using LRU eviction
+      */
     enforceMaxSize() {
         while (this.cache.size >= config.maxCacheEntries) {
             // Find the least recently used entry

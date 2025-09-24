@@ -1,7 +1,7 @@
 /**
- * Caching system for MCP Web Scrape Server
- * Handles HTTP caching with ETags and Last-Modified headers
- */
+  * Caching system for MCP Web Scrape Server
+  * Handles HTTP caching with ETags and Last-Modified headers
+  */
 export interface CacheEntry {
     url: string;
     content: string;
@@ -24,24 +24,24 @@ declare class ContentCache {
     private accessOrder;
     private accessCounter;
     /**
-     * Get a cache entry by URL
-     */
+      * Get a cache entry by URL
+      */
     get(url: string): CacheEntry | undefined;
     /**
-     * Set a cache entry
-     */
+      * Set a cache entry
+      */
     set(entry: CacheEntry): void;
     /**
-     * Delete a cache entry
-     */
+      * Delete a cache entry
+      */
     delete(url: string): boolean;
     /**
-     * Check if an entry is still valid based on TTL
-     */
+      * Check if an entry is still valid based on TTL
+      */
     private isEntryValid;
     /**
-     * Enforce maximum cache size using LRU eviction
-     */
+      * Enforce maximum cache size using LRU eviction
+      */
     private enforceMaxSize;
     /**
      * Get all cache entries
