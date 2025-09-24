@@ -2373,12 +2373,21 @@ export function createServer() {
                     };
                     // Enhanced detection patterns for various social media indicators
                     const socialIndicators = {
-                        twitter: ['twitter.com', 'x.com', '@twitter', 'twitter:', 'follow us on twitter', 'tweet'],
-                        facebook: ['facebook.com', 'fb.com', '@facebook', 'facebook:', 'like us on facebook', 'fb:'],
-                        instagram: ['instagram.com', '@instagram', 'instagram:', 'follow us on instagram', 'insta'],
-                        linkedin: ['linkedin.com', '@linkedin', 'linkedin:', 'connect on linkedin'],
-                        youtube: ['youtube.com', '@youtube', 'youtube:', 'subscribe on youtube', 'yt:'],
-                        tiktok: ['tiktok.com', '@tiktok', 'tiktok:', 'follow on tiktok'],
+                        twitter: ['twitter.com', 'x.com', 'tweet'],
+                        facebook: ['facebook.com', 'fb.com'],
+                        instagram: ['instagram.com', 'insta'],
+                        linkedin: ['linkedin.com'],
+                        youtube: ['youtube.com'],
+                        tiktok: ['tiktok.com'],
+                    };
+                    // Text-based indicators for contextual detection (can contain special chars)
+                    const textIndicators = {
+                        twitter: ['@twitter', 'twitter:', 'follow us on twitter'],
+                        facebook: ['@facebook', 'facebook:', 'like us on facebook', 'fb:'],
+                        instagram: ['@instagram', 'instagram:', 'follow us on instagram'],
+                        linkedin: ['@linkedin', 'linkedin:', 'connect on linkedin'],
+                        youtube: ['@youtube', 'youtube:', 'subscribe on youtube', 'yt:'],
+                        tiktok: ['@tiktok', 'tiktok:', 'follow on tiktok'],
                     };
                     const shouldExtract = (platform) => platforms.includes('all') || platforms.includes(platform);
                     // Extract from direct links
@@ -2421,47 +2430,57 @@ export function createServer() {
                                 });
                             });
                             // Check for social media buttons/icons by class names
-                            $(`.${indicator.replace('.', '\\.')}, [class*="${platform}"], [class*="${indicator.split('.')[0]}"]`).each((_, element) => {
-                                const $element = $(element);
-                                const href = $element.attr('href') || $element.find('a').attr('href') || '';
-                                const text = $element.text().trim() || $element.attr('title') || '';
-                                if (href && !socialLinks[platform]?.some((link) => link.url === href)) {
-                                    if (!socialLinks[platform])
-                                        socialLinks[platform] = [];
-                                    socialLinks[platform].push({
-                                        url: href,
-                                        username: '',
-                                        linkText: text,
-                                        detectionMethod: 'css_class'
-                                    });
-                                }
-                            });
-                            // Check for social media mentions in text content
-                            const pageText = $('body').text().toLowerCase();
-                            if (pageText.includes(indicator.toLowerCase())) {
-                                // Look for URLs in the vicinity of social media mentions
-                                $('*').each((_, element) => {
-                                    const elementText = $(element).text().toLowerCase();
-                                    if (elementText.includes(indicator.toLowerCase())) {
-                                        const links = $(element).find('a[href]');
-                                        links.each((_, linkEl) => {
-                                            const href = $(linkEl).attr('href') || '';
-                                            if (href.includes(platform) || href.includes(indicator?.split('.')[0] || '')) {
-                                                if (!socialLinks[platform])
-                                                    socialLinks[platform] = [];
-                                                if (!socialLinks[platform].some((link) => link.url === href)) {
-                                                    socialLinks[platform].push({
-                                                        url: href,
-                                                        username: '',
-                                                        linkText: $(linkEl).text().trim(),
-                                                        detectionMethod: 'contextual_mention'
-                                                    });
-                                                }
-                                            }
+                            // Skip indicators with special characters that would break CSS selectors
+                            if (!/[:\s@]/.test(indicator)) {
+                                $(`.${indicator.replace('.', '\\.')}, [class*="${platform}"], [class*="${indicator.split('.')[0]}"]`).each((_, element) => {
+                                    const $element = $(element);
+                                    const href = $element.attr('href') || $element.find('a').attr('href') || '';
+                                    const text = $element.text().trim() || $element.attr('title') || '';
+                                    // Only include if href actually contains the platform domain
+                                    if (href && href.includes(indicator) && !socialLinks[platform]?.some((link) => link.url === href)) {
+                                        if (!socialLinks[platform])
+                                            socialLinks[platform] = [];
+                                        socialLinks[platform].push({
+                                            url: href,
+                                            username: '',
+                                            linkText: text,
+                                            detectionMethod: 'css_class'
                                         });
                                     }
                                 });
                             }
+                        });
+                        // Check for social media mentions in text content using textIndicators
+                        Object.entries(textIndicators).forEach(([platform, indicators]) => {
+                            if (!shouldExtract(platform))
+                                return;
+                            indicators.forEach(indicator => {
+                                const pageText = $('body').text().toLowerCase();
+                                if (pageText.includes(indicator.toLowerCase())) {
+                                    // Look for URLs in the vicinity of social media mentions
+                                    $('*').each((_, element) => {
+                                        const elementText = $(element).text().toLowerCase();
+                                        if (elementText.includes(indicator.toLowerCase())) {
+                                            const links = $(element).find('a[href]');
+                                            links.each((_, linkEl) => {
+                                                const href = $(linkEl).attr('href') || '';
+                                                if (href.includes(platform) || href.includes(indicator?.split('.')[0] || '')) {
+                                                    if (!socialLinks[platform])
+                                                        socialLinks[platform] = [];
+                                                    if (!socialLinks[platform].some((link) => link.url === href)) {
+                                                        socialLinks[platform].push({
+                                                            url: href,
+                                                            username: '',
+                                                            linkText: $(linkEl).text().trim(),
+                                                            detectionMethod: 'contextual_mention'
+                                                        });
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            });
                         });
                     });
                     // Extract from meta tags and structured data
