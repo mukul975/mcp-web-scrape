@@ -10,13 +10,13 @@
 
 ## 📦 Version
 
-**Current Version:** `1.0.5`
+**Current Version:** `1.0.6`
 
 ## 🎬 Demo
 
 ```bash
 # Extract content from any webpage
-npx mcp-web-scrape@1.0.5
+npx mcp-web-scrape@1.0.6
 
 # Example: Extract from a news article
 > extract_content https://news.ycombinator.com
@@ -70,13 +70,13 @@ npx mcp-web-scrape@1.0.5
 
 ```bash
 # Install globally
-npm install -g mcp-web-scrape@1.0.5
+npm install -g mcp-web-scrape@1.0.6
 
 # Try it instantly (latest version)
 npx mcp-web-scrape@latest
 
 # Try specific version
-npx mcp-web-scrape@1.0.5
+npx mcp-web-scrape@1.0.6
 
 # Or start HTTP server
 node dist/http.js
@@ -106,7 +106,7 @@ Add to your `~/Library/Application Support/ChatGPT/config.json`:
   "mcpServers": {
     "web-scrape": {
       "command": "npx",
-      "args": ["mcp-web-scrape@1.0.5"]
+      "args": ["mcp-web-scrape@1.0.6"]
     }
   }
 }
@@ -121,7 +121,7 @@ Add to your `~/Library/Application Support/Claude/claude_desktop_config.json`:
   "mcpServers": {
     "web-scrape": {
       "command": "npx",
-      "args": ["mcp-web-scrape@1.0.5"]
+      "args": ["mcp-web-scrape@1.0.6"]
     }
   }
 }
@@ -229,13 +229,13 @@ Add to your `~/Library/Application Support/Claude/claude_desktop_config.json`:
 
 ```bash
 # Install specific version
-npm install -g mcp-web-scrape@1.0.5
+npm install -g mcp-web-scrape@1.0.6
 
 # Or use directly (latest)
 npx mcp-web-scrape@latest
 
 # Or use specific version
-npx mcp-web-scrape@1.0.5
+npx mcp-web-scrape@1.0.6
 ```
 
 ## 🔧 Configuration
