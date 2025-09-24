@@ -48,8 +48,8 @@ function parseArray(value: string | undefined, defaultValue: string[]): string[]
 export function loadConfig(): Config {
   return {
     // Server settings
-    httpPort: parseNumber(process.env['MCP_WS_PORT'], 3000),
-    httpHost: process.env['MCP_WS_HOST'] || '127.0.0.1',
+    httpPort: parseNumber(process.env['PORT'] || process.env['MCP_WS_PORT'], 3000),
+    httpHost: process.env['MCP_WS_HOST'] || '0.0.0.0',
     
     // Fetching settings
     userAgent: process.env['MCP_WS_USER_AGENT'] || 'MCP-Web-Scrape/1.0.0 (+https://github.com/modelcontextprotocol/mcp-web-scrape)',
