@@ -4,18 +4,19 @@
 
 [![npm version](https://img.shields.io/npm/v/mcp-web-scrape.svg)](https://www.npmjs.com/package/mcp-web-scrape)
 [![CI](https://github.com/mukul975/mcp-web-scrape/workflows/CI/badge.svg)](https://github.com/mukul975/mcp-web-scrape/actions)
+[![Koyeb Deploy](https://img.shields.io/badge/Deploy-Koyeb-00D9FF?logo=koyeb)](https://spotty-querida-mahipal-c30254bb.koyeb.app/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub stars](https://img.shields.io/github/stars/mukul975/mcp-web-scrape.svg?style=social&label=Star)](https://github.com/mukul975/mcp-web-scrape)
 
 ## 📦 Version
 
-**Current Version:** `1.0.3`
+**Current Version:** `1.0.5`
 
 ## 🎬 Demo
 
 ```bash
 # Extract content from any webpage
-npx mcp-web-scrape@1.0.1
+npx mcp-web-scrape@1.0.5
 
 # Example: Extract from a news article
 > extract_content https://news.ycombinator.com
@@ -69,17 +70,32 @@ npx mcp-web-scrape@1.0.1
 
 ```bash
 # Install globally
-npm install -g mcp-web-scrape@1.0.1
+npm install -g mcp-web-scrape@1.0.5
 
 # Try it instantly (latest version)
 npx mcp-web-scrape@latest
 
 # Try specific version
-npx mcp-web-scrape@1.0.1
+npx mcp-web-scrape@1.0.5
 
 # Or start HTTP server
 node dist/http.js
 ```
+
+## 🌐 Live Demo
+
+**Try the live deployment:** [https://spotty-querida-mahipal-c30254bb.koyeb.app/](https://spotty-querida-mahipal-c30254bb.koyeb.app/)
+
+```bash
+# Test the live API
+curl https://spotty-querida-mahipal-c30254bb.koyeb.app/health
+curl https://spotty-querida-mahipal-c30254bb.koyeb.app/info
+
+# Use as HTTP endpoint in your applications
+POST https://spotty-querida-mahipal-c30254bb.koyeb.app/mcp
+```
+
+**Hosted on Koyeb** - Serverless, auto-scaling, global edge deployment
 
 ### ChatGPT Desktop Setup
 
@@ -90,7 +106,7 @@ Add to your `~/Library/Application Support/ChatGPT/config.json`:
   "mcpServers": {
     "web-scrape": {
       "command": "npx",
-      "args": ["mcp-web-scrape@1.0.1"]
+      "args": ["mcp-web-scrape@1.0.5"]
     }
   }
 }
@@ -105,7 +121,7 @@ Add to your `~/Library/Application Support/Claude/claude_desktop_config.json`:
   "mcpServers": {
     "web-scrape": {
       "command": "npx",
-      "args": ["mcp-web-scrape@1.0.1"]
+      "args": ["mcp-web-scrape@1.0.5"]
     }
   }
 }
@@ -213,13 +229,13 @@ Add to your `~/Library/Application Support/Claude/claude_desktop_config.json`:
 
 ```bash
 # Install specific version
-npm install -g mcp-web-scrape@1.0.1
+npm install -g mcp-web-scrape@1.0.5
 
 # Or use directly (latest)
 npx mcp-web-scrape@latest
 
 # Or use specific version
-npx mcp-web-scrape@1.0.1
+npx mcp-web-scrape@1.0.5
 ```
 
 ## 🔧 Configuration
