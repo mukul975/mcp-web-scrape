@@ -4,7 +4,6 @@
 
 [![npm version](https://img.shields.io/npm/v/mcp-web-scrape.svg)](https://www.npmjs.com/package/mcp-web-scrape)
 [![CI](https://github.com/mukul975/mcp-web-scrape/workflows/CI/badge.svg)](https://github.com/mukul975/mcp-web-scrape/actions)
-[![Koyeb Deploy](https://img.shields.io/badge/Deploy-Koyeb-00D9FF?logo=koyeb)](https://spotty-querida-mahipal-c30254bb.koyeb.app/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub stars](https://img.shields.io/github/stars/mukul975/mcp-web-scrape.svg?style=social&label=Star)](https://github.com/mukul975/mcp-web-scrape)
 
@@ -81,21 +80,6 @@ npx mcp-web-scrape@1.0.6
 # Or start HTTP server
 node dist/http.js
 ```
-
-## 🌐 Live Demo
-
-**Try the live deployment:** [https://spotty-querida-mahipal-c30254bb.koyeb.app/](https://spotty-querida-mahipal-c30254bb.koyeb.app/)
-
-```bash
-# Test the live API
-curl https://spotty-querida-mahipal-c30254bb.koyeb.app/health
-curl https://spotty-querida-mahipal-c30254bb.koyeb.app/info
-
-# Use as HTTP endpoint in your applications
-POST https://spotty-querida-mahipal-c30254bb.koyeb.app/mcp
-```
-
-**Hosted on Koyeb** - Serverless, auto-scaling, global edge deployment
 
 ### ChatGPT Desktop Setup
 
