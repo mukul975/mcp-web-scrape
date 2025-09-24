@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.5] - 2024-12-19
+
+### Fixed
+- Fixed Node.js 18 compatibility by downgrading cheerio to 1.0.0-rc.12
+- Resolved "File is not defined" ReferenceError in undici dependency
+- Ensured compatibility with Node.js 18.20.8 runtime environments
+
+## [1.0.4] - 2024-12-19
+
+### Changed
+- Version bump for npm registry publication
+
 ## [1.0.3] - 2024-12-19
 
 ### Changed
