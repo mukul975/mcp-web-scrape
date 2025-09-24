@@ -2364,12 +2364,12 @@ export function createServer() {
                     const $ = cheerio.load(fetchResult.content);
                     const socialLinks = {};
                     const platformPatterns = {
-                        twitter: /(?:twitter\.com|x\.com)\/([a-zA-Z0-9_]+)(?:\/.*)?/i,
-                        facebook: /(?:facebook\.com|fb\.com)\/([a-zA-Z0-9._-]+)(?:\/.*)?/i,
-                        instagram: /instagram\.com\/([a-zA-Z0-9._]+)(?:\/.*)?/i,
-                        linkedin: /linkedin\.com\/(?:in|company)\/([a-zA-Z0-9-]+)(?:\/.*)?/i,
-                        youtube: /youtube\.com\/(?:channel\/|user\/|c\/|@)?([a-zA-Z0-9_-]+)(?:\/.*)?/i,
-                        tiktok: /tiktok\.com\/@([a-zA-Z0-9._]+)(?:\/.*)?/i,
+                        twitter: /(?:twitter\.com|x\.com)\/([a-zA-Z0-9_]+)/i,
+                        facebook: /(?:facebook\.com|fb\.com)\/([a-zA-Z0-9._-]+)/i,
+                        instagram: /instagram\.com\/([a-zA-Z0-9._]+)/i,
+                        linkedin: /linkedin\.com\/(?:in|company)\/([a-zA-Z0-9-]+)/i,
+                        youtube: /youtube\.com\/(?:channel\/|user\/|c\/|@)?([a-zA-Z0-9_-]+)/i,
+                        tiktok: /tiktok\.com\/@([a-zA-Z0-9._]+)/i,
                     };
                     // Enhanced detection patterns for various social media indicators
                     const socialIndicators = {
