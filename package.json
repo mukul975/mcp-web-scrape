@@ -1,6 +1,6 @@
 {
   "name": "mcp-web-scrape",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Clean, cached web content for agents—Markdown + citations",
   "main": "dist/server.js",
   "type": "module",
