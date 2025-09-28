@@ -1,8 +1,8 @@
 {
   "mcpServers": {
     "web-scrape": {
-      "command": "node",
-      "args": ["/Users/anonymous/Desktop/mcp-web-scrape/dist/stdio.js"],
+      "command": "npx",
+      "args": ["mcp-web-scrape"],
       "env": {
         "MCP_RESPECT_ROBOTS": "true",
         "MCP_MAX_SIZE": "5242880",

@@ -11,7 +11,27 @@
 
 **Current Version:** `1.0.6`
 
-## 🎬 Demo
+## 🎬 Live Demos
+
+See MCP Web Scrape in action! These demos show real-time extraction and processing:
+
+### 📄 Content Extraction
+![Extract Content Demo](demo/extract_content%20demo.gif)
+*Transform messy HTML into clean, agent-ready Markdown with automatic citations*
+
+### 🔗 Link Extraction  
+![Extract Links Demo](demo/extract_link%20demo.gif)
+*Extract and categorize all links from any webpage with filtering options*
+
+### 📊 Metadata Extraction
+![Metadata Demo](demo/metadata%20demo.gif)
+*Get comprehensive page metadata including title, description, author, and keywords*
+
+### 📝 Content Summarization
+![Summarize Content Demo](demo/summarize_content%20demo.gif)
+*AI-powered content summarization for quick insights and key points*
+
+### 🚀 Quick Start Demo
 
 ```bash
 # Extract content from any webpage
@@ -22,8 +42,6 @@ npx mcp-web-scrape@1.0.6
 ✅ Extracted 1,247 words with 5 citations
 📄 Clean Markdown ready for your AI agent
 ```
-
-*Transform messy HTML into clean, agent-ready Markdown with automatic citations*
 
 ## 🎯 Tool Examples
 
