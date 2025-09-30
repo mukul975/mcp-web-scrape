@@ -16,19 +16,19 @@
 See MCP Web Scrape in action! These demos show real-time extraction and processing:
 
 ### 📄 Content Extraction
-![Extract Content Demo](demo/extract_content_demo.gif)
+![Extract Content Demo](https://raw.githubusercontent.com/mukul975/mcp-web-scrape/main/demo/extract_content_demo.gif)
 *Transform messy HTML into clean, agent-ready Markdown with automatic citations*
 
 ### 🔗 Link Extraction  
-![Extract Links Demo](demo/extract_link_demo.gif)
+![Extract Links Demo](https://raw.githubusercontent.com/mukul975/mcp-web-scrape/main/demo/extract_link_demo.gif)
 *Extract and categorize all links from any webpage with filtering options*
 
 ### 📊 Metadata Extraction
-![Metadata Demo](demo/metadata_demo.gif)
+![Metadata Demo](https://raw.githubusercontent.com/mukul975/mcp-web-scrape/main/demo/metadata_demo.gif)
 *Get comprehensive page metadata including title, description, author, and keywords*
 
 ### 📝 Content Summarization
-![Summarize Content Demo](demo/summarize_content_demo.gif)
+![Summarize Content Demo](https://raw.githubusercontent.com/mukul975/mcp-web-scrape/main/demo/summarize_content_demo.gif)
 *AI-powered content summarization for quick insights and key points*
 
 ### 🚀 Quick Start Demo
