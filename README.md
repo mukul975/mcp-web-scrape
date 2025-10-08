@@ -15,21 +15,21 @@
 
 See MCP Web Scrape in action! These demos show real-time extraction and processing:
 
-### 📄 Content Extraction
-![Extract Content Demo]<img src="demo/extract_content_demo.gif"><br>
-*Transform messy HTML into clean, agent-ready Markdown with automatic citations*
+<h3>📄 Content Extraction</h3>
+<img src="demo/extract_content_demo.gif" alt="Extract Content Demo" width="600" style="border-radius:12px;"><br>
+<p><em>Transform messy HTML into clean, agent-ready Markdown with automatic citations</em></p>
 
-### 🔗 Link Extraction  
-![Extract Links Demo](https://raw.githubusercontent.com/mukul975/mcp-web-scrape/main/demo/extract_link_demo.gif)
-*Extract and categorize all links from any webpage with filtering options*
+<h3>🔗 Link Extraction</h3>
+<img src="https://raw.githubusercontent.com/mukul975/mcp-web-scrape/main/demo/extract_link_demo.gif" alt="Extract Links Demo" width="600" style="border-radius:12px;"><br>
+<p><em>Extract and categorize all links from any webpage with filtering options</em></p>
 
-### 📊 Metadata Extraction
-![Metadata Demo](https://raw.githubusercontent.com/mukul975/mcp-web-scrape/main/demo/metadata_demo.gif)
-*Get comprehensive page metadata including title, description, author, and keywords*
+<h3>📊 Metadata Extraction</h3>
+<img src="https://raw.githubusercontent.com/mukul975/mcp-web-scrape/main/demo/metadata_demo.gif" alt="Metadata Demo" width="600" style="border-radius:12px;"><br>
+<p><em>Get comprehensive page metadata including title, description, author, and keywords</em></p>
 
-### 📝 Content Summarization
-![Summarize Content Demo](https://raw.githubusercontent.com/mukul975/mcp-web-scrape/main/demo/summarize_content_demo.gif)
-*AI-powered content summarization for quick insights and key points*
+<h3>📝 Content Summarization</h3>
+<img src="https://raw.githubusercontent.com/mukul975/mcp-web-scrape/main/demo/summarize_content_demo.gif" alt="Summarize Content Demo" width="600" style="border-radius:12px;"><br>
+<p><em>AI-powered content summarization for quick insights and key points</em></p>
 
 ### 🚀 Quick Start Demo
 
