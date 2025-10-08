@@ -16,7 +16,7 @@
 See MCP Web Scrape in action! These demos show real-time extraction and processing:
 
 ### 📄 Content Extraction
-![Extract Content Demo](https://raw.githubusercontent.com/mukul975/mcp-web-scrape/main/demo/extract_content_demo.gif)
+![Extract Content Demo](demo/extract_content_demo.gif)
 *Transform messy HTML into clean, agent-ready Markdown with automatic citations*
 
 ### 🔗 Link Extraction  
