@@ -16,7 +16,7 @@
 See MCP Web Scrape in action! These demos show real-time extraction and processing:
 
 ### 📄 Content Extraction
-![Extract Content Demo]<img src="demo/extract_content_demo.gif"><br>
+![Extract Content Demo]<img src="demo/extract_content_demo.gif">
 *Transform messy HTML into clean, agent-ready Markdown with automatic citations*
 
 ### 🔗 Link Extraction  
