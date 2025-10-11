@@ -3,7 +3,6 @@
 > Clean, cached web content for agents—Markdown + citations, robots-aware, ETag/304 caching.
 
 [![npm version](https://img.shields.io/npm/v/mcp-web-scrape.svg)](https://www.npmjs.com/package/mcp-web-scrape)
-[![CI](https://github.com/mukul975/mcp-web-scrape/workflows/CI/badge.svg)](https://github.com/mukul975/mcp-web-scrape/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub stars](https://img.shields.io/github/stars/mukul975/mcp-web-scrape.svg?style=social&label=Star)](https://github.com/mukul975/mcp-web-scrape)
 
