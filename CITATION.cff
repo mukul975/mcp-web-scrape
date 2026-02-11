@@ -1,0 +1,40 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "MCP Web Scrape – Clean, Cached Web Content for AI Agents"
+abstract: "A powerful, AI-integrated web scraping Model Context Protocol (MCP) server for automated content extraction, SEO analysis, security scanning, performance monitoring, and more. Seamlessly extract and process web content with 40+ tools designed for AI assistants like Claude and ChatGPT."
+authors:
+  - family-names: "Mahipal"
+    given-names: "Mahipal"
+    orcid: "0009-0003-4474-946X"
+repository-code: "https://github.com/mukul975/mcp-web-scrape"
+url: "https://github.com/mukul975/mcp-web-scrape"
+license: MIT
+keywords:
+  - "MCP"
+  - "Model Context Protocol"
+  - "Web Scraping"
+  - "Content Extraction"
+  - "AI Web Tools"
+  - "Claude Integration"
+  - "ChatGPT Tools"
+  - "Markdown Conversion"
+  - "SEO Analysis"
+  - "Security Scanning"
+  - "Performance Monitoring"
+  - "Web Caching"
+  - "Robots.txt Compliance"
+  - "Citation Extraction"
+  - "AI Integration"
+version: "1.0.7"
+date-released: "2025-09-23"
+preferred-citation:
+  type: software
+  title: "MCP Web Scrape – Clean, Cached Web Content for AI Agents"
+  authors:
+    - family-names: "Mahipal"
+      given-names: "Mahipal"
+  repository-code: "https://github.com/mukul975/mcp-web-scrape"
+  url: "https://github.com/mukul975/mcp-web-scrape"
+  license: MIT
+  version: "1.0.7"
